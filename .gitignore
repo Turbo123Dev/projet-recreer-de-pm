@@ -1,0 +1,19 @@
+# Ignorer les dépendances
+client/node_modules/
+server/node_modules/
+
+# Ignorer les fichiers de configuration locaux
+client/.ionic/
+client/.capacitor/
+.env
+*.env
+
+# Ignorer les dossiers de build
+client/www/
+client/android/
+client/ios/
+server/dist/
+
+# Autres fichiers à ignorer
+.DS_Store
+.idea
