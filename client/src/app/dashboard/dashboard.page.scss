@@ -1,0 +1,458 @@
+/* src/app/dashboard/dashboard.page.scss */
+
+// --- Variables de couleurs ajustées pour la maquette claire ---
+// IMPORTANT : Ces variables DOIVENT être définies dans src/theme/variables.scss pour être globales.
+// Assurez-vous d'y avoir supprimé tout bloc @media (prefers-color-scheme: dark)
+:root {
+    // Couleurs principales d'Ionic (ajustées pour la maquette claire)
+    --ion-color-primary: #5260ff; // Un bleu-violet doux, comme sur la maquette
+    --ion-color-primary-rgb: 82, 96, 255;
+    --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-shade: #4854e0;
+    --ion-color-primary-tint: #6370ff;
+    --ion-color-secondary: #00b8d4; // Turquoise pour les accents
+    --ion-color-secondary-rgb: 0, 184, 212;
+    --ion-color-secondary-contrast: #ffffff;
+    --ion-color-secondary-shade: #00a2bb;
+    --ion-color-secondary-tint: #1ac0d8;
+    --ion-color-tertiary: #ffab40; // Orange doux
+    --ion-color-tertiary-rgb: 255, 171, 64;
+    --ion-color-tertiary-contrast: #ffffff;
+    --ion-color-tertiary-shade: #e09738;
+    --ion-color-tertiary-tint: #ffb553;
+    --ion-color-success: #2dd36f; // Vert pour les badges "Présentiel"
+    --ion-color-warning: #ffc409; // Jaune
+    --ion-color-danger: #eb445a; // Rouge
+    // Couleurs spécifiques à la maquette : fond très clair, textes, cartes
+    --ion-color-light: #F0F2F5; // Fond général clair, légèrement bleuté (comme la maquette)
+    --ion-color-medium: #ced4da; // Gris clair pour bordures et texte secondaire
+    --ion-color-dark: #343a40; // Texte sombre pour contraste
+    --card-bg-color: #ffffff; // Fond des cartes blanc pur
+    --text-color-primary: #212529; // Texte principal très foncé
+    --text-color-secondary: #6c757d; // Texte secondaire gris moyen
+    --border-radius-card: 12px; // Rayon de bordure des cartes
+    --shadow-card: 0 4px 10px rgba(0, 0, 0, 0.05); // Ombre légère et subtile
+    --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.1); // Ombre plus marquée au survol
+    // Couleurs pour les icônes des actions rapides (plus pastels, inspirées de la maquette)
+    --action-search-color: #6a8aff; // Bleu doux
+    --action-planning-color: #a36aff; // Violet doux
+    --action-chat-color: #6aff8a; // Vert doux
+    --action-faq-color: #ff8a6a; // Orange-rose doux
+}
+
+// Styles globaux sur le body pour assurer le fond clair partout
+body {
+    --ion-background-color: var(--ion-color-light); // Force le fond clair sur le body
+    --ion-text-color: var(--text-color-primary); // Couleur de texte par défaut
+}
+
+// --- Styles pour le contenu du dashboard ---
+.dashboard-content {
+    --background: var(--ion-color-light); // Assure le fond clair pour ion-content
+    padding: 0; // Pas de padding sur ion-content lui-même, il sera sur le wrapper
+    // Ceci va centrer le contenu principal et lui donner une largeur maximale
+    // pour simuler l'aspect d'une application mobile sur un grand écran
+    .main-content-wrapper {
+        width: 100%;
+        max-width: 600px; // Largeur maximale pour le contenu (similaire à un mobile)
+        margin: 0 auto; // Centre le conteneur horizontalement
+        padding: 20px; // Padding intérieur pour que le contenu respire
+        box-sizing: border-box; // Inclut padding dans la largeur totale
+    }
+    // Espacement entre les sections
+    .welcome-section,
+    .quick-actions-section,
+    .upcoming-sessions-section,
+    .stats-section {
+        margin-bottom: 24px;
+    }
+    .section-title {
+        display: flex;
+        align-items: center;
+        font-size: 1.05em; // Taille des titres de section
+        font-weight: 700;
+        color: var(--text-color-primary);
+        margin-bottom: 15px;
+        ion-icon {
+            margin-inline-end: 8px;
+            color: var(--ion-color-primary);
+            font-size: 1.25em; // Taille des icônes de titre
+        }
+    }
+}
+
+// --- Header ---
+ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    ion-icon {
+        margin-inline-end: 8px;
+        font-size: 1.3em;
+        color: var(--ion-color-primary-contrast);
+    }
+}
+
+// --- Section de bienvenue ---
+.welcome-section {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    .welcome-card {
+        background: linear-gradient(135deg, var(--ion-color-primary), #7a8cff); // Dégradé cohérent
+        color: var(--ion-color-primary-contrast);
+        padding: 25px 20px;
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+        .welcome-icon {
+            font-size: 2.8em; // Emoji un peu plus petit
+            margin-bottom: 10px;
+            animation: bounceIn 0.8s ease-out;
+        }
+        h1 {
+            font-size: 1.5em; // Titre principal réduit
+            margin: 5px 0;
+            color: var(--ion-color-primary-contrast);
+            font-weight: 700;
+        }
+        h2 {
+            font-size: 1em; // Sous-titre réduit
+            margin: 0 0 10px;
+            color: rgba(var(--ion-color-primary-contrast-rgb), 0.9);
+            font-weight: normal;
+        }
+        .app-name {
+            font-weight: bold;
+        }
+        .welcome-question {
+            font-size: 0.85em; // Texte de question réduit
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+    }
+}
+
+// --- Section Actions rapides ---
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // S'adapte mieux
+    gap: 12px; // Espacement réduit
+    .action-card {
+        background: var(--card-bg-color);
+        padding: 15px; // Padding réduit
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        /* Changé pour colonne pour un alignement centre */
+        align-items: center;
+        /* Centrage horizontal */
+        text-align: center;
+        /* Centrage du texte */
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border: none;
+        position: relative;
+        &:hover {
+            transform: translateY(-4px); // Effet de survol réduit
+            box-shadow: var(--shadow-hover);
+        }
+        .action-icon {
+            width: 45px; // Taille des cercles d'icônes réduite
+            height: 45px;
+            border-radius: 50%; // Cercle
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px; // Espace sous l'icône
+            font-size: 1.8em; // Taille des icônes à l'intérieur du cercle
+            color: #ffffff; // Couleur des icônes blanches
+            // Couleurs spécifiques pour les icônes d'actions rapides (pastels comme dans votre demande)
+            &.search-icon {
+                background: var(--action-search-color);
+            }
+            &.planning-icon {
+                background: var(--action-planning-color);
+            }
+            &.chat-icon {
+                background: var(--action-chat-color);
+            }
+            &.faq-icon {
+                background: var(--action-faq-color);
+            }
+            ion-icon {
+                --ionicon-color: #ffffff; // S'assure que la couleur de l'icône reste blanche
+            }
+        }
+        .action-content {
+            // Les titres et paragraphes sont centrés par text-align: center sur .action-card
+            h4 {
+                font-size: 0.95em; // Titres des actions réduits
+                font-weight: bold;
+                color: var(--text-color-primary);
+                margin: 0 0 2px;
+            }
+            p {
+                font-size: 0.75em; // Texte descriptif réduit
+                color: var(--text-color-secondary);
+                margin: 0;
+            }
+        }
+        .action-arrow {
+            position: absolute;
+            /* Reste en position absolue */
+            top: 8px;
+            right: 8px;
+            font-size: 1em; // Flèche réduite
+            color: var(--ion-color-medium);
+            opacity: 0.7;
+        }
+    }
+}
+
+// --- Section Prochaines séances ---
+.upcoming-sessions-section {
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        ion-button {
+            --padding-start: 8px;
+            --padding-end: 8px;
+            font-size: 0.75em; // Bouton "Voir tout" réduit
+            text-transform: capitalize;
+            --border-radius: 5px;
+            font-weight: 500;
+        }
+    }
+    .sessions-list {
+        display: grid;
+        gap: 10px; // Espacement réduit
+    }
+    .session-card {
+        background: var(--card-bg-color);
+        padding: 12px; // Padding réduit
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        align-items: center;
+        border: none;
+        transition: transform 0.2s ease-out;
+        &:hover {
+            transform: translateY(-2px);
+        }
+        .session-date {
+            flex-shrink: 0;
+            text-align: center;
+            margin-inline-end: 12px;
+            padding-inline-end: 12px;
+            border-inline-end: 1px solid var(--ion-color-medium);
+            opacity: 0.9;
+            .day {
+                font-size: 1.6em; // Jour réduit
+                font-weight: 700;
+                color: var(--ion-color-primary);
+                line-height: 1;
+            }
+            .month {
+                font-size: 0.7em;
+                text-transform: uppercase;
+                color: var(--text-color-secondary);
+            }
+        }
+        .session-info {
+            flex-grow: 1;
+            h4 {
+                font-size: 0.95em; // Titre de séance réduit
+                font-weight: bold;
+                color: var(--text-color-primary);
+                margin: 0 0 3px;
+            }
+            p {
+                display: flex;
+                align-items: center;
+                font-size: 0.8em; // Texte de détail réduit
+                color: var(--text-color-secondary);
+                margin: 0 0 1px;
+                ion-icon {
+                    margin-inline-end: 5px;
+                    font-size: 0.9em;
+                    color: var(--ion-color-primary);
+                }
+            }
+        }
+        .session-mode {
+            flex-shrink: 0;
+            margin-inline-start: 8px;
+            ion-badge {
+                font-size: 0.7em; // Badge réduit
+                padding: 4px 7px;
+                border-radius: 5px;
+                font-weight: 600;
+                text-transform: capitalize;
+            }
+        }
+    }
+    .no-sessions {
+        text-align: center;
+        padding: 25px 15px; // Padding réduit
+        background: var(--card-bg-color);
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow-card);
+        border: none;
+        .no-sessions-icon {
+            font-size: 2.5em; // Icône réduite
+            margin-bottom: 12px;
+            color: var(--ion-color-medium);
+        }
+        h4 {
+            font-size: 1.1em; // Titre réduit
+            color: var(--text-color-primary);
+            margin: 0 0 8px;
+        }
+        p {
+            font-size: 0.85em; // Texte réduit
+            color: var(--text-color-secondary);
+            margin-bottom: 15px;
+        }
+        ion-button {
+            --border-radius: 6px; // Bouton réduit
+            font-weight: 600;
+            ion-icon {
+                margin-inline-end: 3px;
+            }
+        }
+    }
+}
+
+// --- Section Statistiques ---
+.stats-section {
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); // S'adapte mieux
+        gap: 12px;
+        .stat-item {
+            background: var(--card-bg-color);
+            padding: 18px 8px; // Padding réduit
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            border: none;
+            transition: transform 0.2s ease-out;
+            &:hover {
+                transform: translateY(-2px);
+            }
+            .stat-number {
+                font-size: 1.6em; // Chiffres de stat réduits
+                font-weight: 700;
+                color: var(--ion-color-primary);
+                margin-bottom: 4px;
+            }
+            .stat-label {
+                font-size: 0.75em; // Texte de label réduit
+                color: var(--text-color-secondary);
+                font-weight: 500;
+            }
+        }
+    }
+}
+
+// --- Footer / Barre de navigation inférieure ---
+ion-footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08); // Ombre plus fine
+    background: var(--card-bg-color);
+}
+
+ion-tab-bar {
+    --background: var(--card-bg-color);
+    --border: none;
+    padding-bottom: env(safe-area-inset-bottom);
+    ion-tab-button {
+        --color: var(--text-color-secondary);
+        --color-selected: var(--ion-color-primary);
+        transition: all 0.2s ease-out;
+        ion-icon {
+            font-size: 1.5em; // Icônes de tabs réduites
+            margin-bottom: 2px;
+            transition: transform 0.2s ease-out;
+        }
+        ion-label {
+            font-size: 0.7em; // Label réduit
+            font-weight: 600;
+            transition: color 0.2s ease-out;
+        }
+        &.tab-selected {
+            ion-icon {
+                transform: translateY(-1px) scale(1.05); // Effet de soulèvement réduit
+                color: var(--ion-color-primary);
+            }
+            ion-label {
+                color: var(--ion-color-primary);
+            }
+        }
+    }
+}
+
+// Keyframes pour l'animation d'entrée de l'emoji de bienvenue (inchangées)
+@keyframes bounceIn {
+    0%,
+    20%,
+    40%,
+    60%,
+    80%,
+    100% {
+        transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    20% {
+        transform: scale3d(1.1, 1.1, 1.1);
+    }
+    40% {
+        transform: scale3d(0.9, 0.9, 0.9);
+    }
+    60% {
+        opacity: 1;
+        transform: scale3d(1.03, 1.03, 1.03);
+    }
+    80% {
+        transform: scale3d(0.97, 0.97, 0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+// Media queries pour l'adaptation responsive
+@media (min-width: 768px) {
+    .main-content-wrapper {
+        padding: 24px; // Plus de padding sur les grands écrans pour un meilleur aspect
+    }
+    .actions-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
