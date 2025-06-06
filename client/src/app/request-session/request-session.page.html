@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Planifier une séance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="request-session-content">
+  <div class="planning-card">
+    <ion-text color="primary">
+      <h2>Demander une nouvelle séance</h2>
+    </ion-text>
+    <p>Remplissez les détails ci-dessous pour trouver le tuteur idéal.</p>
+
+    <form [formGroup]="sessionForm" (ngSubmit)="submitRequest()">
+      <ion-list lines="none">
+        <ion-item>
+          <ion-select label="Tuteur" labelPlacement="floating" formControlName="tutorId" placeholder="Sélectionnez un tuteur">
+            <ion-select-option value="tutor123">M. Dupont (Maths)</ion-select-option>
+            <ion-select-option value="tutor456">Mme. Martin (Physique)</ion-select-option>
+            <ion-select-option value="tutor789">Mlle. Dubois (Informatique)</ion-select-option>
+          </ion-select>
+          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('tutorId')?.invalid && sessionForm.get('tutorId')?.touched">
+            Requis
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          <ion-input label="Date de la séance" labelPlacement="floating" [value]="sessionForm.get('date')?.value | date:'fullDate'" readonly></ion-input>
+          <ion-datetime-button datetime="sessionDatePopover"></ion-datetime-button>
+          <ion-popover [keepContentsMounted]="true" trigger="sessionDatePopover" triggerAction="click">
+            <ng-template>
+              <ion-datetime id="sessionDatePopover" presentation="date" formControlName="date" (ionChange)="onDateChange($event)"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('date')?.invalid && sessionForm.get('date')?.touched">
+            Requis
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          <ion-input label="Heure de la séance" labelPlacement="floating" [value]="sessionForm.get('time')?.value | date:'shortTime'" readonly></ion-input>
+          <ion-datetime-button datetime="sessionTimePopover"></ion-datetime-button>
+          <ion-popover [keepContentsMounted]="true" trigger="sessionTimePopover" triggerAction="click">
+            <ng-template>
+              <ion-datetime id="sessionTimePopover" presentation="time" formControlName="time" (ionChange)="onTimeChange($event)"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('time')?.invalid && sessionForm.get('time')?.touched">
+            Requis
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          <ion-select label="Mode de la séance" labelPlacement="floating" formControlName="mode">
+            <ion-select-option value="presentiel">Présentiel</ion-select-option>
+            <ion-select-option value="visio">Visioconférence</ion-select-option>
+          </ion-select>
+          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('mode')?.invalid && sessionForm.get('mode')?.touched">
+            Requis
+          </ion-note>
+        </ion-item>
+
+        <ion-item *ngIf="sessionForm.get('mode')?.value === 'visio'">
+          <ion-input label="Lien Visio (Zoom, Google Meet, etc.)" labelPlacement="floating" formControlName="videoLink"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-textarea label="Votre feedback ou notes supplémentaires" labelPlacement="floating" rows="4" formControlName="userFeedback"></ion-textarea>
+          </ion-item>
+
+      </ion-list>
+
+      <ion-button expand="block" type="submit" class="submit-button" [disabled]="sessionForm.invalid">
+        Envoyer la demande
+        <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </form>
+  </div>
+
+  <ion-card *ngIf="appFeedbackMessage" [color]="appFeedbackMessageType" class="feedback-card">
+    <ion-card-content>
+      <ion-icon slot="start" [name]="appFeedbackMessageType === 'success' ? 'checkmark-circle' : appFeedbackMessageType === 'error' ? 'close-circle' : 'information-circle'"></ion-icon>
+      {{ appFeedbackMessage }}
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

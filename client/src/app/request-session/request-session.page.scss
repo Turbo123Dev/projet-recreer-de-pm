@@ -1,0 +1,107 @@
+/* src/app/request-session/request-session.page.scss */
+
+.request-session-content {
+  --background: var(--ion-color-light); // Utilise la couleur de fond générale de ton dashboard
+  padding: 20px;
+
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+  }
+
+  .planning-card {
+    background: var(--card-bg-color); // Utilise la couleur de carte de ton dashboard
+    border-radius: var(--border-radius-card); // Utilise le rayon de bordure des cartes de ton dashboard
+    box-shadow: var(--shadow-card); // Utilise l'ombre des cartes de ton dashboard
+    padding: 25px;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: var(--text-color-secondary); // Utilise ta couleur de texte secondaire
+      font-size: 0.9em;
+      margin-bottom: 20px;
+    }
+
+    ion-item {
+      --background: transparent;
+      --border-color: var(--ion-color-medium); // Couleur de bordure pour les inputs
+      --highlight-color-focused: var(--ion-color-primary); // Couleur du focus
+      --padding-start: 0;
+      --inner-padding-end: 0;
+      margin-bottom: 15px; // Espacement entre les items
+
+      ion-input, ion-textarea, ion-select, ion-datetime {
+        --color: var(--text-color-primary); // Couleur du texte dans les champs
+        font-size: 0.95em;
+      }
+
+      ion-label {
+        color: var(--text-color-secondary); // Couleur du label flottant
+        font-size: 0.9em;
+      }
+
+      ion-textarea {
+        min-height: 80px; // Hauteur minimale pour le champ de feedback
+        --padding-top: 10px;
+        --padding-bottom: 10px;
+      }
+
+      ion-note[color="danger"] {
+        font-size: 0.75em;
+        margin-top: 5px;
+      }
+    }
+
+    .submit-button {
+      margin-top: 30px;
+      --background: var(--ion-color-primary);
+      --color: var(--ion-color-primary-contrast);
+      --border-radius: 8px;
+      height: 50px;
+      font-size: 1.1em;
+      font-weight: bold;
+
+      ion-icon {
+        font-size: 1.3em;
+      }
+    }
+  }
+
+  .feedback-card {
+    margin-top: 20px;
+    border-radius: var(--border-radius-card);
+    box-shadow: var(--shadow-card);
+    
+    &[color="success"] {
+      --background: var(--ion-color-success-tint);
+      --color: var(--ion-color-success-contrast);
+    }
+    &[color="error"] {
+      --background: var(--ion-color-danger-tint);
+      --color: var(--ion-color-danger-contrast);
+    }
+    &[color="info"] {
+      --background: var(--ion-color-tertiary-tint);
+      --color: var(--ion-color-tertiary-contrast);
+    }
+
+    ion-card-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95em;
+
+      ion-icon {
+        font-size: 1.5em;
+        margin-right: 5px;
+      }
+    }
+  }
+}
