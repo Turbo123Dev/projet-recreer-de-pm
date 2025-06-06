@@ -1,3 +1,4 @@
+// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -6,8 +7,12 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
   {
+    path: 'inscription', 
+    loadComponent: () => import('./inscription/inscription.component').then((m) => m.InscriptionComponent), 
+  },
+  {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'inscription',
     pathMatch: 'full',
   },
 ];
