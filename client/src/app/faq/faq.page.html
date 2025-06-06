@@ -1,22 +1,23 @@
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">faq</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>FAQ</ion-title>
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
-      </ion-button>
+    <!-- Bouton retour -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard" text=""></ion-back-button>
     </ion-buttons>
+
+    <!-- Titre centré -->
+    <ion-title class="ion-text-center">FAQ</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Message d’intro -->
+  <div class="ion-text-center" style="margin-top: 12px;">
+    <h2>Besoin d’aide ?</h2>
+    <p>Consulte les questions fréquentes ou pose la tienne à la communauté !</p>
+  </div>
+
+  <!-- Poser une nouvelle question -->
   <ion-card>
     <ion-card-header>
       <ion-card-title>Poser une nouvelle question</ion-card-title>
@@ -35,26 +36,26 @@
 
   <!-- Boucle sur chaque question -->
   <ion-card *ngFor="let question of questions">
-    <!-- En-tête de la carte -->
     <ion-card-header>
       <ion-card-title>{{ question.titre }}</ion-card-title>
       <ion-card-subtitle>
         Par {{ question.auteur }} – {{ question.date | date:'shortTime' }}
       </ion-card-subtitle>
 
+      <!-- Infos + bouton Reply -->
       <ion-item lines="none" class="ion-margin-top">
         <ion-icon name="chatbox-ellipses-outline" slot="start"></ion-icon>
         <ion-label>
           {{ question.reponses.length }} {{ question.reponses.length === 1 ? 'reply' : 'replies' }}
         </ion-label>
 
-        <!-- Ce bouton active ou désactive l'affichage du champ réponse -->
-        <ion-button fill="solid" size="small" slot="end" color="primary"
+        <ion-button *ngIf="roleUtilisateur === 'TUTEUR'" fill="solid" size="small" slot="end" color="primary"
           (click)="question.showReply = !question.showReply">
           Reply
         </ion-button>
       </ion-item>
-      <!-- Champ de réponse -->
+
+      <!-- Formulaire de réponse -->
       <div *ngIf="question.showReply" class="ion-padding-start">
         <ion-item>
           <ion-textarea [(ngModel)]="reponseEnCours[question.id]" placeholder="Votre réponse...">
@@ -66,32 +67,44 @@
           Envoyer la réponse
         </ion-button>
       </div>
+
+      <!-- Liste des réponses -->
       <ion-list *ngIf="question.reponses.length > 0" class="ion-margin-top">
-        <ion-item *ngFor="let rep of question.reponses">
-          <ion-label>
+        <ion-item *ngFor="let rep of question.reponses; let i = index">
+          <ion-label *ngIf="!rep.editing">
             <strong>{{ rep.auteur }}</strong> — {{ rep.date | date:'shortTime' }}<br />
             {{ rep.contenu }}
           </ion-label>
+
+          <ion-input *ngIf="rep.editing" [(ngModel)]="rep.contenu" placeholder="Modifier la réponse..." fill="outline">
+          </ion-input>
+
+          <ion-buttons slot="end">
+            <ion-button *ngIf="roleUtilisateur === 'TUTEUR' && !rep.editing" (click)="rep.editing = true">
+              Modifier
+            </ion-button>
+            <ion-button *ngIf="rep.editing" color="success" (click)="validerModification(rep)">
+              Valider
+            </ion-button>
+            <ion-button *ngIf="rep.editing" color="medium" (click)="annulerModification(rep)">
+              Annuler
+            </ion-button>
+            <ion-button *ngIf="roleUtilisateur === 'TUTEUR'" color="danger" fill="clear" size="small"
+              (click)="supprimerReponse(question, i)">
+              Supprimer
+            </ion-button>
+          </ion-buttons>
         </ion-item>
       </ion-list>
+
+      <ion-button *ngIf="roleUtilisateur === 'TUTEUR'" color="danger" fill="clear" size="small"
+        (click)="supprimerQuestion(question.id)">
+        Supprimer la question
+      </ion-button>
     </ion-card-header>
 
-    <!-- Corps de la carte -->
     <ion-card-content>
-      <!-- Contenu de la question -->
       <p>{{ question.contenu }}</p>
-
-      <!-- Zone du nombre de réponses et bouton Reply -->
-      <ion-item lines="none" class="ion-margin-top">
-        <ion-icon name="chatbox-ellipses-outline" slot="start"></ion-icon>
-        <ion-label>
-          {{ question.reponses.length }} {{ question.reponses.length === 1 ? 'reply' : 'replies' }}
-        </ion-label>
-        <ion-button fill="solid" size="small" slot="end" color="primary">
-          Reply
-        </ion-button>
-      </ion-item>
     </ion-card-content>
   </ion-card>
-
 </ion-content>
