@@ -5,32 +5,26 @@ import { FormsModule } from '@angular/forms';   // Utile si vous avez des formul
 
 // Importation de IonIcon, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonBadge etc.
 // Ces composants Ionic doivent être importés individuellement si le composant est standalone.
-import { 
-  IonHeader, 
-  IonToolbar, 
-  IonTitle, 
-  IonContent, 
-  IonIcon, 
-  IonButton, 
-  IonBadge 
-} from '@ionic/angular'; 
+import {
+ IonicModule
+} from '@ionic/angular';
 
 // Importez la fonction addIcons
-import { addIcons } from 'ionicons'; 
+import { addIcons } from 'ionicons';
 
 // Importez TOUTES les icônes que vous utilisez dans votre dashboard.page.html
-import { 
-  schoolOutline, 
-  flashOutline, 
-  searchOutline, 
-  calendarOutline, 
-  chatbubblesOutline, 
-  helpCircleOutline, 
-  chevronForwardOutline, 
-  timeOutline, 
+import {
+  schoolOutline,
+  flashOutline,
+  searchOutline,
+  calendarOutline,
+  chatbubblesOutline,
+  helpCircleOutline,
+  chevronForwardOutline,
+  timeOutline,
   personOutline,
   addOutline,
-  statsChartOutline 
+  statsChartOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -39,29 +33,21 @@ import {
   styleUrls: ['./dashboard.page.scss'], // Le chemin vers votre fichier SCSS
 
   // Configuration pour les composants standalone
-   
+
   imports: [
     CommonModule,     // Pour *ngIf et *ngFor
     FormsModule,      // Pour ngModel et autres fonctionnalités de formulaire
-    
-    // Importez tous les composants Ionic que vous utilisez dans le template
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonIcon,          // C'est celui-ci qui manquait et causait l'erreur "element inconnu"
-    IonButton,
-    IonBadge
+    IonicModule
     // Ajoutez d'autres composants Ionic si vous les utilisez (ex: IonCard, IonList, etc.)
   ]
 })
-export class HomePage implements OnInit {
+export class DashboardPage implements OnInit {
 
   // Propriétés pour l'affichage dans le HTML
-  userName: string = 'Samy'; 
-  
+  userName: string = 'Samy';
+
   upcomingSessions: any[] = []; // Tableau pour stocker les sessions à venir
-  
+
   userStats: any = { // Objet pour stocker les statistiques de l'utilisateur
     totalSessions: 0,
     hoursLearned: 0,
@@ -70,15 +56,15 @@ export class HomePage implements OnInit {
 
   constructor(private navCtrl: NavController) {
     // Appelez addIcons dans le constructeur pour enregistrer les icônes
-    addIcons({ 
-      schoolOutline, 
-      flashOutline, 
-      searchOutline, 
-      calendarOutline, 
-      chatbubblesOutline, 
-      helpCircleOutline, 
-      chevronForwardOutline, 
-      timeOutline, 
+    addIcons({
+      schoolOutline,
+      flashOutline,
+      searchOutline,
+      calendarOutline,
+      chatbubblesOutline,
+      helpCircleOutline,
+      chevronForwardOutline,
+      timeOutline,
       personOutline,
       addOutline,
       statsChartOutline
@@ -98,7 +84,7 @@ export class HomePage implements OnInit {
   loadUserData() {
     // Ici, vous feriez un appel à un service pour récupérer le nom de l'utilisateur connecté
     // Pour l'instant, on utilise une valeur fixe.
-    // Exemple : this.userName = this.authService.getCurrentUserName(); 
+    // Exemple : this.userName = this.authService.getCurrentUserName();
   }
 
   loadUpcomingSessions() {
@@ -110,7 +96,7 @@ export class HomePage implements OnInit {
     ];
 
     // Si vous voulez tester le cas sans sessions :
-    // this.upcomingSessions = []; 
+    // this.upcomingSessions = [];
   }
 
   loadUserStats() {
