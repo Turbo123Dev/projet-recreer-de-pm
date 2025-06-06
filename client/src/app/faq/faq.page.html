@@ -6,25 +6,25 @@
   </ion-header>
 </ion-content>
 <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>FAQ</ion-title>
-      <ion-buttons slot="end">
-        <ion-button>
-          <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>FAQ</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-content class="ion-padding">
-    <ion-card>
+<ion-content class="ion-padding">
+  <ion-card>
     <ion-card-header>
       <ion-card-title>Poser une nouvelle question</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
       <ion-item>
-       <ion-textarea [(ngModel)]="nouvelleQuestion" placeholder="Écris ta question ici..."></ion-textarea>
+        <ion-textarea [(ngModel)]="nouvelleQuestion" placeholder="Écris ta question ici..."></ion-textarea>
       </ion-item>
 
       <ion-button expand="block" color="success" (click)="ajouterQuestion()" [disabled]="!nouvelleQuestion.trim()">
@@ -32,7 +32,7 @@
       </ion-button>
     </ion-card-content>
   </ion-card>
-  
+
   <!-- Boucle sur chaque question -->
   <ion-card *ngFor="let question of questions">
     <!-- En-tête de la carte -->
@@ -41,6 +41,39 @@
       <ion-card-subtitle>
         Par {{ question.auteur }} – {{ question.date | date:'shortTime' }}
       </ion-card-subtitle>
+
+      <ion-item lines="none" class="ion-margin-top">
+        <ion-icon name="chatbox-ellipses-outline" slot="start"></ion-icon>
+        <ion-label>
+          {{ question.reponses.length }} {{ question.reponses.length === 1 ? 'reply' : 'replies' }}
+        </ion-label>
+
+        <!-- Ce bouton active ou désactive l'affichage du champ réponse -->
+        <ion-button fill="solid" size="small" slot="end" color="primary"
+          (click)="question.showReply = !question.showReply">
+          Reply
+        </ion-button>
+      </ion-item>
+      <!-- Champ de réponse -->
+      <div *ngIf="question.showReply" class="ion-padding-start">
+        <ion-item>
+          <ion-textarea [(ngModel)]="reponseEnCours[question.id]" placeholder="Votre réponse...">
+          </ion-textarea>
+        </ion-item>
+
+        <ion-button expand="block" size="small" color="success" (click)="ajouterReponse(question.id)"
+          [disabled]="!reponseEnCours[question.id].trim()">
+          Envoyer la réponse
+        </ion-button>
+      </div>
+      <ion-list *ngIf="question.reponses.length > 0" class="ion-margin-top">
+        <ion-item *ngFor="let rep of question.reponses">
+          <ion-label>
+            <strong>{{ rep.auteur }}</strong> — {{ rep.date | date:'shortTime' }}<br />
+            {{ rep.contenu }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </ion-card-header>
 
     <!-- Corps de la carte -->

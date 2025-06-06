@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {IonContent,IonHeader,IonTitle,IonToolbar,IonCard,IonCardHeader,IonCardTitle,IonCardSubtitle,IonCardContent,IonItem,IonIcon,IonLabel,IonButton,IonTextarea,IonButtons} from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonIcon, IonLabel, IonButton, IonTextarea, IonButtons, IonList } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-faq',
@@ -11,7 +11,7 @@ import {IonContent,IonHeader,IonTitle,IonToolbar,IonCard,IonCardHeader,IonCardTi
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
-    IonCardContent, IonItem, IonIcon, IonLabel, IonButton,IonTextarea,IonButtons,
+    IonCardContent, IonItem, IonIcon, IonLabel, IonButton, IonTextarea, IonButtons, IonList,
     CommonModule, FormsModule
   ]
 })
@@ -23,7 +23,7 @@ export class FaqPage implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.questions = [
       {
         id: 1,
@@ -46,17 +46,34 @@ export class FaqPage implements OnInit {
       }
     ];
   }
-    ajouterQuestion() {
-      const nouvelle = {
-        id: this.questions.length + 1,
-        titre: 'Nouvelle #Question',
-        contenu: this.nouvelleQuestion,
-        auteur: 'Moi',
-        date: new Date(),
-        reponses: []
-      };
-      this.questions.unshift(nouvelle);
-      this.nouvelleQuestion = '';
-      
+  ajouterQuestion() {
+    const nouvelle = {
+      id: this.questions.length + 1,
+      titre: 'Nouvelle #Question',
+      contenu: this.nouvelleQuestion,
+      auteur: 'Moi',
+      date: new Date(),
+      reponses: []
+    };
+    this.questions.unshift(nouvelle);
+    this.nouvelleQuestion = '';
   }
+
+  reponseEnCours: { [id: number]: string } = {};
+
+  ajouterReponse(questionId: number) {
+    const question = this.questions.find(q => q.id === questionId);
+    const contenu = this.reponseEnCours[questionId]?.trim();
+
+    if (question && contenu) {
+      question.reponses.push({
+        auteur: 'Moi',
+        contenu,
+        date: new Date()
+      });
+
+      this.reponseEnCours[questionId] = '';
+    }
+  }
+
 }
