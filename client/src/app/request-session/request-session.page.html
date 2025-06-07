@@ -10,19 +10,86 @@
 <ion-content [fullscreen]="true" class="request-session-content">
   <div class="planning-card">
     <ion-text color="primary">
-      <h2>Demander une nouvelle séance......</h2>
+      <h2>Demander une nouvelle séance</h2>
     </ion-text>
     <p>Remplissez les détails ci-dessous pour trouver le tuteur idéal.</p>
 
     <form [formGroup]="sessionForm" (ngSubmit)="submitRequest()">
       <ion-list lines="none">
+
         <ion-item>
-          <ion-select label="Tuteur" labelPlacement="floating" formControlName="tutorId" placeholder="Sélectionnez un tuteur">
-            <ion-select-option value="tutor123">M. Dupont (Maths)</ion-select-option>
-            <ion-select-option value="tutor456">Mme. Martin (Physique)</ion-select-option>
-            <ion-select-option value="tutor789">Mlle. Dubois (Informatique)</ion-select-option>
+          <ion-searchbar placeholder="Rechercher par nom, matière, ou compétence..."
+            (ionInput)="filterTutors($event)"
+            formControlName="tutorSearch"
+            debounce="500"
+          ></ion-searchbar>
+        </ion-item>
+
+        <ion-item>
+          <ion-select label="Choisir un tuteur" labelPlacement="floating" formControlName="tutorId"
+            interface="popover" placeholder="Sélectionnez un tuteur disponible">
+            <ion-select-option *ngFor="let tutor of filteredTutors" [value]="tutor.id">
+              {{ tutor.name }} ({{ tutor.subject }})
+            </ion-select-option>
           </ion-select>
           <ion-note slot="end" color="danger" *ngIf="sessionForm.get('tutorId')?.invalid && sessionForm.get('tutorId')?.touched">
+            Requis
+          </ion-note>
+        </ion-item>
+
+        <ion-card *ngIf="selectedTutorDetails" class="selected-tutor-card">
+          <div class="tutor-header">
+            <ion-avatar>
+              <img [src]="selectedTutorDetails.photoUrl || 'assets/placeholder-tutor.png'" alt="Photo de {{ selectedTutorDetails.name }}">
+            </ion-avatar>
+            <div class="tutor-info">
+              <ion-card-title>{{ selectedTutorDetails.name }}</ion-card-title>
+              <ion-card-subtitle>{{ selectedTutorDetails.subject }} ({{ selectedTutorDetails.level }})</ion-card-subtitle>
+            </div>
+          </div>
+          <ion-card-content>
+            <p class="tutor-description">{{ selectedTutorDetails.description }}</p>
+            <div class="tutor-details-chips">
+              <ion-chip color="tertiary" *ngIf="selectedTutorDetails.price">
+                <ion-label>{{ selectedTutorDetails.price }} / heure</ion-label>
+              </ion-chip>
+              <ion-chip color="secondary">
+                <ion-icon name="star"></ion-icon>
+                <ion-label>{{ selectedTutorDetails.rating }}/5 ({{ selectedTutorDetails.reviews }} avis)</ion-label>
+              </ion-chip>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-item>
+          <ion-select label="Matière de la séance" labelPlacement="floating" formControlName="subject" placeholder="Sélectionnez la matière (ex: Mathématiques)">
+            <ion-select-option value="maths">Mathématiques</ion-select-option>
+            <ion-select-option value="physique">Physique</ion-select-option>
+            <ion-select-option value="informatique">Informatique</ion-select-option>
+            <ion-select-option value="chimie">Chimie</ion-select-option>
+            <ion-select-option value="francais">Français</ion-select-option>
+            <ion-select-option value="anglais">Anglais</ion-select-option>
+            <ion-select-option value="biologie">Biologie</ion-select-option>
+            <ion-select-option value="histoire-geo">Histoire-Géographie</ion-select-option>
+            <ion-select-option value="svt">SVT</ion-select-option>
+          </ion-select>
+          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('subject')?.invalid && sessionForm.get('subject')?.touched">
+            Requis
+          </ion-note>
+        </ion-item>
+
+        <ion-item>
+          <ion-select label="Niveau scolaire ou universitaire" labelPlacement="floating" formControlName="level" placeholder="Sélectionnez votre niveau (ex: Lycée)">
+            <ion-select-option value="primaire">Primaire</ion-select-option>
+            <ion-select-option value="college">Collège</ion-select-option>
+            <ion-select-option value="seconde">Seconde</ion-select-option>
+            <ion-select-option value="lycee">Lycée (Première/Terminale)</ion-select-option>
+            <ion-select-option value="universite_l1">Université L1</ion-select-option>
+            <ion-select-option value="universite_l2">Université L2</ion-select-option>
+            <ion-select-option value="universite_l3">Université L3</ion-select-option>
+            <ion-select-option value="superieur">Supérieur (prépa, BTS, IUT)</ion-select-option>
+          </ion-select>
+          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('level')?.invalid && sessionForm.get('level')?.touched">
             Requis
           </ion-note>
         </ion-item>
@@ -54,29 +121,47 @@
         </ion-item>
 
         <ion-item>
-          <ion-select label="Mode de la séance" labelPlacement="floating" formControlName="mode">
-            <ion-select-option value="presentiel">Présentiel</ion-select-option>
-            <ion-select-option value="visio">Visioconférence</ion-select-option>
+          <ion-select label="Durée de la séance" labelPlacement="floating" formControlName="duration" placeholder="Sélectionnez la durée">
+            <ion-select-option value="30">30 minutes</ion-select-option>
+            <ion-select-option value="60">1 heure</ion-select-option>
+            <ion-select-option value="90">1 heure 30 minutes</ion-select-option>
+            <ion-select-option value="120">2 heures</ion-select-option>
           </ion-select>
-          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('mode')?.invalid && sessionForm.get('mode')?.touched">
+          <ion-note slot="end" color="danger" *ngIf="sessionForm.get('duration')?.invalid && sessionForm.get('duration')?.touched">
             Requis
           </ion-note>
         </ion-item>
 
+        <ion-item class="mode-selection-item">
+          <ion-label position="stacked">Mode</ion-label>
+          <ion-segment value="presentiel" formControlName="mode">
+            <ion-segment-button value="presentiel">
+              <ion-label>En personne</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="visio">
+              <ion-label>Vidéo</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-item>
+
         <ion-item *ngIf="sessionForm.get('mode')?.value === 'visio'">
-          <ion-input label="Lien Visio (Zoom, Google Meet, etc.)" labelPlacement="floating" formControlName="videoLink"></ion-input>
+          <ion-input label="Lien Visio (Zoom, Google Meet, etc.)" labelPlacement="floating" formControlName="videoLink" placeholder="Ex: meet.google.com/xyz-abc-def"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-textarea label="Votre feedback ou notes supplémentaires" labelPlacement="floating" rows="4" formControlName="userFeedback"></ion-textarea>
-          </ion-item>
+          <ion-textarea label="Notes pour le tuteur ou objectifs de la séance" labelPlacement="floating" rows="4" formControlName="notesForTutor" placeholder="Décrivez vos besoins ou les sujets à aborder..."></ion-textarea>
+        </ion-item>
 
       </ion-list>
 
-      <ion-button expand="block" type="submit" class="submit-button" [disabled]="sessionForm.invalid">
-        Envoyer la demande
-        <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
-      </ion-button>
+      <div class="form-actions">
+        <ion-button type="submit" color="success" [disabled]="sessionForm.invalid">
+          Confirmer
+        </ion-button>
+        <ion-button type="button" color="danger" (click)="goBack()">
+          Annuler
+        </ion-button>
+      </div>
     </form>
   </div>
 
