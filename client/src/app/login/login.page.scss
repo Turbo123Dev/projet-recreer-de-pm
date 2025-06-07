@@ -1,0 +1,156 @@
+/* src/app/login/login.page.scss */
+
+ion-content {
+  // Option 1: Fond dégradé doux pour une touche moderne
+  --background: linear-gradient(to bottom, #f0f4f8, #a6c9f0);
+
+  /*
+  // Option 2: Image de fond (décommenter et remplacer 'background-login.jpg' si tu as une image)
+  // Assure-toi que l'image est dans le dossier 'src/assets/'
+  --background: url('/assets/background-login.jpg') no-repeat center center / cover;
+  */
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Centre verticalement le contenu sur la page
+  align-items: center;    // Centre horizontalement les éléments enfants
+  min-height: 100%;       // Assure que le conteneur prend toute la hauteur disponible
+  max-width: 400px;       // Limite la largeur du formulaire sur les grands écrans pour une meilleure lisibilité
+  margin: 0 auto;         // Centre le conteneur horizontalement sur les grands écrans
+  padding: 20px;          // Ajoute un padding autour du conteneur pour l'esthétique
+}
+
+.app-logo {
+  width: 150px;           // Taille du logo
+  height: auto;
+  margin-bottom: 30px;    // Espace sous le logo
+  border-radius: 50%;     // Si tu veux un logo rond
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Petite ombre pour le logo
+}
+
+ion-card {
+  width: 100%;            // La carte prendra 100% de la largeur de son parent (.login-container)
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); // Ombre plus prononcée pour un effet de profondeur
+  border-radius: 12px;    // Bords arrondis pour un look moderne
+  background: white;      // Fond blanc pour la carte
+  padding: 10px;          // Padding interne pour la carte
+}
+
+ion-card-header {
+  text-align: center;     // Centre le titre et le sous-titre de la carte
+  padding-bottom: 5px;    // Réduit l'espace par défaut en bas du header de la carte
+}
+
+ion-card-title {
+  font-size: 1.8em;       // Taille du titre
+  font-weight: bold;      // Titre en gras
+  color: var(--ion-color-primary, #3880ff); // Utilise la couleur primaire d'Ionic ou une fallback
+  margin-bottom: 5px;     // Petit espace sous le titre
+}
+
+ion-card-subtitle {
+  font-size: 0.9em;       // Taille du sous-titre
+  color: #666;            // Couleur grise pour le sous-titre
+}
+
+ion-item {
+  --background: #f9f9f9;  // Fond léger pour les champs d'entrée
+  --border-color: #355ef2; // Couleur de la ligne sous l'input
+  --highlight-color-focused: var(--ion-color-primary, #3880ff); // Couleur au focus
+  --padding-start: 10px;  // Padding au début de l'item (pour l'icône et l'input)
+  --inner-padding-end: 10px; // Padding à la fin de l'item
+  border-radius: 8px;     // Bords arrondis pour l'item
+  margin-bottom: 18px;    // Espace entre les champs
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); // Légère ombre pour les items
+}
+
+ion-label {
+             // Couleur de l'étiquette
+  font-weight: 700 !important;       // Poids de la police
+  color: var(--ion-color-primary, #3880ff)!important; // Couleur primaire d'Ionic
+}
+
+ion-input {
+  --padding-start: 5px;   // Padding interne pour le texte de l'input
+  color: #333;            // Couleur du texte tapé
+  font-size: 1em;         // Taille de la police de l'input
+}
+
+ion-icon {
+  color: var(--ion-color-medium, #4062ec); // Couleur des icônes
+  margin-right: 8px;      // Espace entre l'icône et le texte
+  font-size: 1.2em;       // Taille de l'icône
+}
+
+ion-button {
+  --border-radius: 28px;  // Boutons très arrondis (pill-shaped)
+  font-weight: bold;      // Texte du bouton en gras
+  height: 50px;           // Hauteur du bouton pour une meilleure ergonomie
+  margin-top: 25px;       // Espace au-dessus du bouton de connexion
+  font-size: 1.1em;       // Taille de la police du bouton
+  letter-spacing: 0.5px;  // Légère séparation des lettres
+  text-transform: none;   // Empêche la mise en majuscule automatique
+
+  // Styles pour le bouton désactivé
+  &[disabled] {
+    opacity: 0.7;
+  }
+}
+
+.error-message {
+  font-size: 0.85em;      // Taille de police pour les messages d'erreur
+  margin-top: -10px;      // Remonte légèrement le message d'erreur
+  margin-bottom: 10px;
+  text-align: left;
+  padding-left: 16px;     // Align avec le début des inputs
+  color: var(--ion-color-danger, #eb445a); // Couleur d'erreur Ionic
+}
+
+a {
+  color: var(--ion-color-primary, #3880ff); // Liens en couleur primaire
+  text-decoration: none;  // Pas de soulignement par défaut
+  font-weight: 600;       // Poids de la police pour les liens
+  transition: color 0.2s ease-in-out; // Animation douce au survol/clic
+
+  &:hover {
+    color: var(--ion-color-primary-shade, #3171e0); // Assombrir au survol
+  }
+}
+
+p.ion-text-center.ion-margin-top {
+  margin-top: 20px; // Assure un bon espacement pour les liens
+}
+
+/* --- Media Queries pour la Responsivité --- */
+
+/* Pour les écrans de taille moyenne et plus grands (tablettes en mode paysage, petits laptops) */
+@media (min-width: 768px) {
+  ion-card {
+    padding: 25px 30px; // Plus de padding interne sur les grands écrans
+  }
+
+  ion-card-title {
+    font-size: 2em; // Titre légèrement plus grand
+  }
+
+  .app-logo {
+    width: 180px; // Logo plus grand sur tablette
+  }
+}
+
+/* Pour les très grands écrans (desktops) */
+@media (min-width: 1200px) {
+  ion-card {
+    padding: 30px 40px; // Encore plus de padding interne
+  }
+
+  ion-card-title {
+    font-size: 2.2em; // Titre encore plus grand
+  }
+
+  .app-logo {
+    width: 200px; // Logo encore plus grand
+  }
+}
