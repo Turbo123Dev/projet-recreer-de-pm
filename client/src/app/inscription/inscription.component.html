@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="inscription-container">
+    <h2>CRÉEZ VOTRE COMPTE</h2>
+
+    <form [formGroup]="inscriptionForm" (ngSubmit)="onSubmit()">
+
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Nom</ion-label>
+        <ion-input formControlName="nom" type="text" placeholder="Entrez votre nom"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f['nom'].invalid && f['nom'].touched">
+          <span *ngIf="f['nom'].errors?.['required']">Le nom est requis.</span>
+      </ion-note>
+
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Prénom</ion-label>
+        <ion-input formControlName="prenom" type="text" placeholder="Entrez votre prénom"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f['prenom'].invalid && f['prenom'].touched">
+          <span *ngIf="f['prenom'].errors?.['required']">Le prénom est requis.</span>
+      </ion-note>
+
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input formControlName="email" type="email" placeholder="Entrez votre email"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f['email'].invalid && f['email'].touched">
+          <span *ngIf="f['email'].errors?.['required']">L'email est requis.</span>
+          <span *ngIf="f['email'].errors?.['email']">Veuillez entrer une adresse email valide.</span>
+      </ion-note>
+
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Mot de passe</ion-label>
+        <ion-input formControlName="password" type="password" placeholder="Entrez votre mot de passe"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f['password'].invalid && f['password'].touched">
+          <span *ngIf="f['password'].errors?.['required']">Le mot de passe est requis.</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Le mot de passe doit contenir au moins 8 caractères.</span>
+          <span *ngIf="f['password'].errors?.['pattern']">Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.</span>
+      </ion-note>
+
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Confirmer le mot de passe</ion-label>
+        <ion-input formControlName="confirmPassword" type="password" placeholder="Confirmez votre mot de passe"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f['confirmPassword'].invalid && f['confirmPassword'].touched">
+          <span *ngIf="f['confirmPassword'].errors?.['required']">La confirmation du mot de passe est requise.</span>
+          <span *ngIf="f['confirmPassword'].errors?.['mismatch']">Les mots de passe ne correspondent pas.</span>
+      </ion-note>
+
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Rôle</ion-label>
+        <ion-select formControlName="role" placeholder="Sélectionnez un rôle" interface="popover">
+          <ion-select-option *ngFor="let role of roles" [value]="role">{{ role }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f['role'].invalid && f['role'].touched">
+          <span *ngIf="f['role'].errors?.['required']">Le rôle est requis.</span>
+      </ion-note>
+
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Sujets</ion-label>
+        <ion-select formControlName="subjects" placeholder="Sélectionnez un ou plusieurs sujets" multiple="true" interface="popover">
+          <ion-select-option *ngFor="let subject of subjects" [value]="subject.id">{{ subject.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-note color="danger" *ngIf="f['subjects'].invalid && f['subjects'].touched">
+          <span *ngIf="f['subjects'].errors?.['required']">Au moins un sujet est requis.</span>
+      </ion-note>
+
+      <ion-button expand="block" type="submit" [disabled]="inscriptionForm.invalid || isLoading" class="ion-margin-top">
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading">S'inscrire</span>
+      </ion-button>
+
+      <p class="ion-text-center">
+        Vous avez déjà un compte ? <a routerLink="/connexion">Connectez-vous ici</a>
+      </p>
+
+    </form>
+  </div>
+</ion-content>
