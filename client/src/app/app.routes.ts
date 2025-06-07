@@ -7,8 +7,8 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
   {
-    path: 'inscription', 
-    loadComponent: () => import('./inscription/inscription.component').then((m) => m.InscriptionComponent), 
+    path: 'inscription',
+    loadComponent: () => import('./inscription/inscription.component').then((m) => m.InscriptionComponent),
   },
   {
     path: '',
@@ -17,6 +17,6 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./login/login.page').then( (m) => m.LoginPage)
   },
 ];

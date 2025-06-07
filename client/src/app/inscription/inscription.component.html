@@ -78,11 +78,10 @@
         <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
         <span *ngIf="!isLoading">S'inscrire</span>
       </ion-button>
-
-      <p class="ion-text-center">
-        Vous avez déjà un compte ? <a href="../login/login.page.html">Connectez-vous ici</a>
-      </p>
-
     </form>
+
+    <p class="ion-text-center" (click)="goToPage('login')">
+      Vous avez déjà un compte ? <a routerLink="/">Connectez-vous ici</a>
+    </p>
   </div>
 </ion-content>

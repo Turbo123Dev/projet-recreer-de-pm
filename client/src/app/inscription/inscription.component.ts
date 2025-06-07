@@ -26,11 +26,11 @@ import {
   templateUrl: './inscription.component.html',
   styleUrls: ['./inscription.component.scss'],
   standalone: true,
-  imports: [ // Liste des modules et composants autonomes nécessaires
+  imports: [
     ReactiveFormsModule, // Pour les formulaires réactifs
-    RouterModule,        // Pour routerLink et la navigation
-    CommonModule,         // Pour *ngIf, *ngFor, etc.
-    IonHeader,           // Composants Ionic
+    RouterModule, // Pour routerLink et la navigation
+    CommonModule, // Pour *ngIf, *ngFor, etc.
+    IonHeader, // Composants Ionic
     IonToolbar,
     IonTitle,
     IonContent,
@@ -42,7 +42,7 @@ import {
     IonNote,
     IonSelect,
     IonSelectOption,
-  ]
+]
 })
 export class InscriptionComponent implements OnInit {
   inscriptionForm!: FormGroup; // Déclaration du formulaire
@@ -128,6 +128,6 @@ export class InscriptionComponent implements OnInit {
   }
 
   goToPage(page:String){
-    this.router.navigateByUrl('/'+{page})
+    this.router.navigateByUrl(`/${page}`)
   }
 }
