@@ -15,4 +15,8 @@ export const routes: Routes = [
     redirectTo: 'inscription',
     pathMatch: 'full',
   },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+  },
 ];

@@ -126,4 +126,8 @@ export class InscriptionComponent implements OnInit {
       this.inscriptionForm.markAllAsTouched();
     }
   }
+
+  goToPage(page:String){
+    this.router.navigateByUrl('/'+{page})
+  }
 }

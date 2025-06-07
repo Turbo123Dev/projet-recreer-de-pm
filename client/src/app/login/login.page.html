@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Connexion</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center"> <div class="login-container"> <img src="assets/icon/logonbrain1.png" alt="Logo de l'application" class="app-logo"> <ion-card>
+      <ion-card-header>
+        <ion-card-title>Bienvenue !</ion-card-title>
+        <ion-card-subtitle>Connectez-vous à votre compte</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+          <ion-item>
+            <ion-icon name="mail-outline" slot="start"></ion-icon> <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon> <ion-label position="floating">Mot de passe</ion-label>
+            <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+          </ion-item>
+
+          <div *ngIf="loginForm.controls['email']?.invalid && loginForm.controls['email']?.touched">
+            <ion-text color="danger" class="error-message">
+              <p *ngIf="loginForm.controls['email']?.errors?.['required']">L'email est requis.</p>
+              <p *ngIf="loginForm.controls['email']?.errors?.['email']">Veuillez entrer un email valide.</p>
+            </ion-text>
+          </div>
+
+          <ion-button expand="block" type="submit" [disabled]="loginForm.invalid" class="ion-margin-top">Se connecter</ion-button>
+        </form>
+
+        <p class="ion-text-center ion-margin-top">
+          Pas encore de compte ? <a routerLink="/register">S'inscrire</a>
+        </p>
+        <p class="ion-text-center">
+          <a routerLink="/forgot-password">Mot de passe oublié ?</a>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
