@@ -1,10 +1,11 @@
 // src/app/services/auth.service.ts
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+
 
 // Définissez l'interface pour un sujet pour un meilleur typage
 export interface Subject {
@@ -18,6 +19,7 @@ export interface Subject {
 export class AuthService {
   private authUrl = `${environment.apiUrl}/api/auth`;
   private subjectsApiUrl = `${environment.apiUrl}/api/subjects`;
+  private dashboardUrl = `${environment.apiUrl}/api/dashboard`
 
   private token: string | null = null;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
@@ -90,4 +92,30 @@ export class AuthService {
     }
     return throwError(() => new Error(errorMessage));
   }
+
+
+  //logique pour recuperer le token
+  getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'x-auth-token': token ? token : '' // Ajoute le token à l'en-tête
+    });
+  }
+
+  getUserProfile(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.get(`${this.dashboardUrl}/me`, { headers });
+  }
+
+  getUpcomingSessions(): Observable<any[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<any[]>(`${this.dashboardUrl}/upcoming-sessions`, { headers });
+  }
+
+  getUserStats(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<any>(`${this.dashboardUrl}/stats`, { headers });
+  }
+
 }

@@ -1,30 +1,24 @@
+// src/app/dashboard/dashboard.page.ts
+
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router'; // Si vous utilisez routerLink pour la navigation, ajoutez-le.
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../services/auth.service'; // Importez le service d'authentification
+import { firstValueFrom } from 'rxjs'; // Pour convertir Observable en Promise
+import { HttpErrorResponse } from '@angular/common/http'; // <-- AJOUTÉ : Importation de HttpErrorResponse
 
-// Importations Ionic - Vous avez déjà IonicModule, qui contient tout.
-// Il n'est pas nécessaire d'importer IonIcon, IonHeader, etc. individuellement ici si vous importez IonicModule.
-// Mais pour une meilleure autocomplétion et clarté de ce qui est utilisé, vous pouvez les laisser.
+// Importations Ionic et des icônes
 import {
   IonicModule,
-  // IonHeader, // Pas strictement nécessaire si IonicModule est importé
-  // IonToolbar, // Pas strictement nécessaire si IonicModule est importé
-  // IonTitle,   // Pas strictement nécessaire si IonicModule est importé
-  // IonContent, // Pas strictement nécessaire si IonicModule est importé
-  IonIcon,    // <--- C'est la clé, mais déjà couverte par IonicModule. Maintenez-le pour la clarté.
+  IonIcon,
   IonButton,
   IonBadge,
-  // Ajoutez IonCard, IonLabel, etc. si vous souhaitez que votre IDE les reconnaisse explicitement
   IonCard,
   IonLabel
 } from '@ionic/angular';
-
-// Importez la fonction addIcons
 import { addIcons } from 'ionicons';
-
-// Importez TOUTES les icônes que vous utilisez dans votre dashboard.page.html
 import {
   schoolOutline,
   flashOutline,
@@ -40,30 +34,33 @@ import {
 } from 'ionicons/icons';
 
 @Component({
-  selector: 'app-home', // Le sélecteur de votre composant
-  templateUrl: './dashboard.page.html', // Le chemin vers votre fichier HTML
-  styleUrls: ['./dashboard.page.scss'], // Le chemin vers votre fichier SCSS
-  standalone: true, // Configuration pour les composants standalone
+  selector: 'app-home',
+  templateUrl: './dashboard.page.html',
+  styleUrls: ['./dashboard.page.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule, // <--- C'est ce module qui rend les <ion-icon> fonctionnels
-    RouterModule // Ajoutez ceci si vous utilisez des routerLink dans votre HTML de dashboard
+    IonicModule,
+    RouterModule
   ]
 })
 export class DashboardPage implements OnInit {
 
-  userName: string = 'Samy';
+  userName: string = 'Invité'; // Valeur par défaut
+  userRole: string = ''; // Pour potentiellement afficher différentes choses selon le rôle
   upcomingSessions: any[] = [];
   userStats: any = {
     totalSessions: 0,
     hoursLearned: 0,
     averageRating: 0
   };
+  isLoadingData: boolean = true; // Pour afficher un spinner pendant le chargement
 
-  constructor(private navCtrl: NavController) {
-    // Appelez addIcons dans le constructeur pour enregistrer les icônes
-    // C'est la bonne pratique pour les composants standalone.
+  constructor(
+    private navCtrl: NavController,
+    private authService: AuthService // Injectez AuthService
+  ) {
     addIcons({
       schoolOutline,
       flashOutline,
@@ -80,31 +77,49 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
-    this.loadUserData();
-    this.loadUpcomingSessions();
-    this.loadUserStats();
+    this.loadDashboardData(); // Charge toutes les données du dashboard
   }
 
-  loadUserData() {
-    // Logique pour charger le nom de l'utilisateur
+  async loadDashboardData() {
+    this.isLoadingData = true;
+    try {
+      // Charger le profil de l'utilisateur
+      const userProfile = await firstValueFrom(this.authService.getUserProfile());
+      this.userName = userProfile.username;
+      this.userRole = userProfile.role;
+      // Vous pouvez stocker d'autres informations de l'utilisateur si nécessaire
+      console.log('Profil utilisateur chargé:', userProfile);
+
+      // Charger les sessions à venir
+      this.upcomingSessions = await firstValueFrom(this.authService.getUpcomingSessions());
+      console.log('Sessions à venir chargées:', this.upcomingSessions);
+
+      // Charger les statistiques de l'utilisateur
+      this.userStats = await firstValueFrom(this.authService.getUserStats());
+      console.log('Statistiques utilisateur chargées:', this.userStats);
+
+    } catch (error) {
+      console.error('Erreur lors du chargement des données du tableau de bord:', error);
+      // Gérer l'erreur, par exemple rediriger vers la page de connexion si le token est invalide
+      // DÉBUT DES MODIFICATIONS : Ajout de la vérification de type
+      if (error instanceof HttpErrorResponse) { // <-- MODIFIÉ : Vérifie si c'est une HttpErrorResponse
+        if (error.status === 401) { // Unauthorized
+          this.authService.logout();
+          this.navCtrl.navigateRoot('/login');
+        }
+      }
+      // FIN DES MODIFICATIONS
+
+      // Réinitialiser les données si une erreur survient, quel que soit le type d'erreur
+      this.userName = 'Erreur';
+      this.upcomingSessions = [];
+      this.userStats = { totalSessions: 0, hoursLearned: 0, averageRating: 0 };
+    } finally {
+      this.isLoadingData = false;
+    }
   }
 
-  loadUpcomingSessions() {
-    this.upcomingSessions = [
-      { day: '15', month: 'Juin', subject: 'Mathématiques', tutor: 'M. Dupont', time: '14:00 - 15:30', mode: 'Présentiel' },
-      { day: '17', month: 'Juin', subject: 'Physique', tutor: 'Mme. Dubois', time: '10:00 - 11:00', mode: 'En ligne' },
-      { day: '20', month: 'Juin', subject: 'Informatique', tutor: 'M. Jean', time: '09:00 - 10:30', mode: 'Présentiel' },
-    ];
-  }
-
-  loadUserStats() {
-    this.userStats = {
-      totalSessions: 12,
-      hoursLearned: 18,
-      averageRating: 4.8
-    };
-  }
-
+  // Vos fonctions de navigation existantes
   goToSearch() {
     this.navCtrl.navigateForward('/search');
     console.log('Naviguer vers la recherche');

@@ -1,149 +1,99 @@
-<ion-header [translucent]="true">
-    <ion-toolbar color="primary">
-        <ion-title>
-            <div class="header-title">
-                <ion-icon name="school-outline"></ion-icon>
-                Soutiens-moi
-            </div>
-        </ion-title>
-    </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true" class="dashboard-content" color-scheme="light">
 
-    <div class="welcome-section">
-        <div class="welcome-card">
-            <div class="welcome-icon">
-                👋
-            </div>
-            <h1>Bonjour {{ userName }} !</h1>
-            <h2>Bienvenue sur <span class="app-name">Soutiens-moi</span></h2>
-            <p class="welcome-question">Prêt à commencer ?</p>
-        </div>
-    </div>
+  <div *ngIf="isLoadingData" class="ion-text-center ion-padding-top">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement du tableau de bord...</p>
+  </div>
 
-    <div class="quick-actions-section">
-        <h3 class="section-title">
-            <ion-icon name="flash-outline"></ion-icon>
-            Actions rapides
-        </h3>
+  <div *ngIf="!isLoadingData">
+      <div class="welcome-section">
+          <div class="welcome-card">
+              <div class="welcome-icon">
+                  👋
+              </div>
+              <h1>Bonjour {{ userName }} !</h1>
+              <h2>Bienvenue sur <span class="app-name">Soutiens-moi</span></h2>
+              <p class="welcome-question">Prêt à commencer ?</p>
+          </div>
+      </div>
 
-        <div class="actions-grid">
-            <div class="action-card" (click)="goToSearch()">
-                <div class="action-icon search-icon">
-                    <ion-icon name="search-outline"></ion-icon>
-                </div>
-                <div class="action-content">
-                    <h4>Rechercher</h4>
-                    <p>Trouver un tuteur ou étudiant</p>
-                </div>
-                <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
-            </div>
+      <div class="quick-actions-section">
+          <h3 class="section-title">
+              <ion-icon name="flash-outline"></ion-icon>
+              Actions rapides
+          </h3>
+          </div>
 
-            <div class="action-card" (click)="goToPlanning()">
-                <div class="action-icon planning-icon">
-                    <ion-icon name="calendar-outline"></ion-icon>
-                </div>
-                <div class="action-content">
-                    <h4>Planifier</h4>
-                    <p>Programmer une séance</p>
-                </div>
-                <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
-            </div>
+      <div class="upcoming-sessions-section">
+          <div class="section-header">
+              <h3 class="section-title">
+                  <ion-icon name="time-outline"></ion-icon>
+                  Mes prochaines séances
+              </h3>
+              <ion-button fill="clear" size="small" (click)="viewAllSessions()">
+                  Voir tout
+              </ion-button>
+          </div>
 
-            <div class="action-card" (click)="goToChat()">
-                <div class="action-icon chat-icon">
-                    <ion-icon name="chatbubbles-outline"></ion-icon>
-                </div>
-                <div class="action-content">
-                    <h4>Chat</h4>
-                    <p>Discuter avec les étudiants</p>
-                </div>
-                <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
-            </div>
+          <div class="sessions-list" *ngIf="upcomingSessions.length > 0">
+              <div class="session-card" *ngFor="let session of upcomingSessions">
+                  <div class="session-date">
+                      <div class="day">{{ session.day }}</div>
+                      <div class="month">{{ session.month }}</div>
+                  </div>
+                  <div class="session-info">
+                      <h4>{{ session.subject }}</h4>
+                      <p class="session-tutor">
+                          <ion-icon name="person-outline"></ion-icon>
+                          Avec {{ session.tutor }}
+                      </p>
+                      <p class="session-time">
+                          <ion-icon name="time-outline"></ion-icon>
+                          {{ session.time }}
+                      </p>
+                  </div>
+                  <div class="session-mode">
+                      <ion-badge [color]="session.mode === 'Présentiel' ? 'success' : 'primary'">
+                          {{ session.mode }}
+                      </ion-badge>
+                  </div>
+              </div>
+          </div>
 
-            <div class="action-card" (click)="goToFAQ()">
-                <div class="action-icon faq-icon">
-                    <ion-icon name="help-circle-outline"></ion-icon>
-                </div>
-                <div class="action-content">
-                    <h4>FAQ</h4>
-                    <p>Questions fréquentes</p>
-                </div>
-                <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
-            </div>
-        </div>
-    </div>
+          <div class="no-sessions" *ngIf="upcomingSessions.length === 0">
+              <div class="no-sessions-icon">
+                  📅
+              </div>
+              <h4>Aucune séance programmée</h4>
+              <p>Planifiez votre première séance de tutorat</p>
+              <ion-button fill="outline" color="primary" (click)="goToPlanning()">
+                  <ion-icon name="add-outline" slot="start"></ion-icon>
+                  Planifier une séance
+              </ion-button>
+          </div>
+      </div>
 
-    <div class="upcoming-sessions-section">
-        <div class="section-header">
-            <h3 class="section-title">
-                <ion-icon name="time-outline"></ion-icon>
-                Mes prochaines séances
-            </h3>
-            <ion-button fill="clear" size="small" (click)="viewAllSessions()">
-                Voir tout
-            </ion-button>
-        </div>
+      <div class="stats-section">
+          <h3 class="section-title">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+              Mes statistiques
+          </h3>
 
-        <div class="sessions-list" *ngIf="upcomingSessions.length > 0">
-            <div class="session-card" *ngFor="let session of upcomingSessions">
-                <div class="session-date">
-                    <div class="day">{{ session.day }}</div>
-                    <div class="month">{{ session.month }}</div>
-                </div>
-                <div class="session-info">
-                    <h4>{{ session.subject }}</h4>
-                    <p class="session-tutor">
-                        <ion-icon name="person-outline"></ion-icon>
-                        Avec {{ session.tutor }}
-                    </p>
-                    <p class="session-time">
-                        <ion-icon name="time-outline"></ion-icon>
-                        {{ session.time }}
-                    </p>
-                </div>
-                <div class="session-mode">
-                    <ion-badge [color]="session.mode === 'Présentiel' ? 'success' : 'primary'">
-                        {{ session.mode }}
-                    </ion-badge>
-                </div>
-            </div>
-        </div>
-
-        <div class="no-sessions" *ngIf="upcomingSessions.length === 0">
-            <div class="no-sessions-icon">
-                📅
-            </div>
-            <h4>Aucune séance programmée</h4>
-            <p>Planifiez votre première séance de tutorat</p>
-            <ion-button fill="outline" color="primary" (click)="goToPlanning()">
-                <ion-icon name="add-outline" slot="start"></ion-icon>
-                Planifier une séance
-            </ion-button>
-        </div>
-    </div>
-
-    <div class="stats-section">
-        <h3 class="section-title">
-            <ion-icon name="stats-chart-outline"></ion-icon>
-            Mes statistiques
-        </h3>
-
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number">{{ userStats.totalSessions }}</div>
-                <div class="stat-label">Séances suivies</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">{{ userStats.hoursLearned }}</div>
-                <div class="stat-label">Heures d'apprentissage</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">{{ userStats.averageRating }}/5</div>
-                <div class="stat-label">Note moyenne</div>
-            </div>
-        </div>
-    </div>
+          <div class="stats-grid">
+              <div class="stat-item">
+                  <div class="stat-number">{{ userStats.totalSessions }}</div>
+                  <div class="stat-label">Séances suivies</div>
+              </div>
+              <div class="stat-item">
+                  <div class="stat-number">{{ userStats.hoursLearned }}</div>
+                  <div class="stat-label">Heures d'apprentissage</div>
+              </div>
+              <div class="stat-item">
+                  <div class="stat-number">{{ userStats.averageRating }}/5</div>
+                  <div class="stat-label">Note moyenne</div>
+              </div>
+          </div>
+      </div>
+  </div>
 
 </ion-content>
