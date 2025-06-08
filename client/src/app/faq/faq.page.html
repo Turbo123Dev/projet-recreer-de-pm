@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <!-- Bouton retour -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard" text=""></ion-back-button>
+    </ion-buttons>
+
+    <!-- Titre centré -->
+    <ion-title class="ion-text-center">FAQ</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Message d’intro -->
+  <div class="ion-text-center" style="margin-top: 12px;">
+    <h2>Besoin d’aide ?</h2>
+    <p>Consulte les questions fréquentes ou pose la tienne à la communauté !</p>
+  </div>
+
+  <!-- Poser une nouvelle question -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Poser une nouvelle question</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-textarea [(ngModel)]="nouvelleQuestion" placeholder="Écris ta question ici..."></ion-textarea>
+      </ion-item>
+
+      <ion-button expand="block" color="success" (click)="ajouterQuestion()" [disabled]="!nouvelleQuestion.trim()">
+        Envoyer
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Boucle sur chaque question -->
+  <ion-card *ngFor="let question of questions">
+    <ion-card-header>
+      <ion-card-title>{{ question.titre }}</ion-card-title>
+      <ion-card-subtitle>
+        Par {{ question.auteur }} – {{ question.date | date:'shortTime' }}
+      </ion-card-subtitle>
+
+      <!-- Infos + bouton Reply -->
+      <ion-item lines="none" class="ion-margin-top">
+        <ion-icon name="chatbox-ellipses-outline" slot="start"></ion-icon>
+        <ion-label>
+          {{ question.reponses.length }} {{ question.reponses.length === 1 ? 'reply' : 'replies' }}
+        </ion-label>
+
+        <ion-button *ngIf="roleUtilisateur === 'TUTEUR'" fill="solid" size="small" slot="end" color="primary"
+          (click)="question.showReply = !question.showReply">
+          Reply
+        </ion-button>
+      </ion-item>
+
+      <!-- Formulaire de réponse -->
+      <div *ngIf="question.showReply" class="ion-padding-start">
+        <ion-item>
+          <ion-textarea [(ngModel)]="reponseEnCours[question.id]" placeholder="Votre réponse...">
+          </ion-textarea>
+        </ion-item>
+
+        <ion-button expand="block" size="small" color="success" (click)="ajouterReponse(question.id)"
+          [disabled]="!reponseEnCours[question.id].trim()">
+          Envoyer la réponse
+        </ion-button>
+      </div>
+
+      <!-- Liste des réponses -->
+      <ion-list *ngIf="question.reponses.length > 0" class="ion-margin-top">
+        <ion-item *ngFor="let rep of question.reponses; let i = index">
+          <ion-label *ngIf="!rep.editing">
+            <strong>{{ rep.auteur }}</strong> — {{ rep.date | date:'shortTime' }}<br />
+            {{ rep.contenu }}
+          </ion-label>
+
+          <ion-input *ngIf="rep.editing" [(ngModel)]="rep.contenu" placeholder="Modifier la réponse..." fill="outline">
+          </ion-input>
+
+          <ion-buttons slot="end">
+            <ion-button *ngIf="roleUtilisateur === 'TUTEUR' && !rep.editing" (click)="rep.editing = true">
+              Modifier
+            </ion-button>
+            <ion-button *ngIf="rep.editing" color="success" (click)="validerModification(rep)">
+              Valider
+            </ion-button>
+            <ion-button *ngIf="rep.editing" color="medium" (click)="annulerModification(rep)">
+              Annuler
+            </ion-button>
+            <ion-button *ngIf="roleUtilisateur === 'TUTEUR'" color="danger" fill="clear" size="small"
+              (click)="supprimerReponse(question, i)">
+              Supprimer
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+
+      <ion-button *ngIf="roleUtilisateur === 'TUTEUR'" color="danger" fill="clear" size="small"
+        (click)="supprimerQuestion(question.id)">
+        Supprimer la question
+      </ion-button>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{ question.contenu }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
