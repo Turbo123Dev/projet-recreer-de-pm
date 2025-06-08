@@ -1,0 +1,20 @@
+ion-content {
+  --background: #f0f2f5;
+}
+
+ion-item {
+  --background: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+ion-footer {
+  ion-toolbar {
+    --background: #ffffff;
+    padding: 5px;
+  }
+  ion-item {
+    --background: #f0f2f5;
+    border-radius: 20px;
+  }
+}
