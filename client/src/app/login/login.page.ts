@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Importations essentielles pour les formulaires réactifs
-import { RouterModule } from '@angular/router'; // Pour la navigation avec routerLink
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { firstValueFrom } from 'rxjs';
 
-// Importez IonicModule pour rendre tous les composants Ionic disponibles.
-// Vous pouvez importer les composants individuels utilisés (IonHeader, etc.) pour une meilleure clarté
-// et pour que l'éditeur de code vous aide avec l'autocomplétion.
-// Les composants qui ne sont pas utilisés dans le template HTML généreront un avertissement (WARNING),
-// mais ne bloqueront pas la compilation. J'ai inclus ceux qui sont probablement utilisés dans votre HTML.
 import {
   IonicModule,
   IonHeader,
@@ -20,53 +17,100 @@ import {
   IonInput,
   IonButton,
   IonLabel,
-  IonNote // <-- Indispensable pour les messages d'erreur de validation
+  IonNote,
+  IonSpinner,
+  IonToast,
+  IonIcon // <-- NOUVEAU : Importez IonIcon pour l'icône de l'œil
 } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: true, // Ceci indique à Angular que ce composant est autonome
+  standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule, // <-- C'est LE MODULE qui active les formulaires réactifs (et donc [formGroup])
-    RouterModule,        // <-- Nécessaire si vous utilisez routerLink dans votre HTML
-    IonicModule          // <-- C'est LE MODULE qui rend tous les composants Ionic (ion-input, ion-button, ion-note, etc.) reconnus
+    ReactiveFormsModule,
+    RouterModule,
+    IonicModule
   ],
 })
-export class LoginPage implements OnInit { // Le nom de la classe doit correspondre à 'LoginPage'
-  loginForm!: FormGroup; // Déclaration du formulaire réactif. Le '!' indique qu'il sera initialisé plus tard.
+export class LoginPage implements OnInit {
+  loginForm!: FormGroup;
+  isLoading = false;
+  isToastOpen = false;
+  toastMessage = '';
+  toastColor = 'danger';
+  showPassword = false; // <-- NOUVEAU : Propriété pour contrôler la visibilité du mot de passe
 
-  // Injection du service FormBuilder pour construire le formulaire
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  // ngOnInit est un hook de cycle de vie Angular où l'on initialise le formulaire
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]], // Champ email avec validation requise et format email
-      password: ['', Validators.required], // Champ mot de passe avec validation requise
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     });
   }
 
-  // Getter 'f' pour accéder facilement aux contrôles du formulaire dans le template HTML
-  // Par exemple, f['email'] au lieu de loginForm.controls['email']
   get f() {
     return this.loginForm.controls;
   }
 
-  // Méthode appelée lorsque le formulaire est soumis
-  onSubmit() {
-    if (this.loginForm.valid) {
-      // Si le formulaire est valide, affiche ses valeurs dans la console
-      console.log('Login Form Submitted:', this.loginForm.value);
-      // Ici, vous ajouteriez la logique pour envoyer les données au serveur
-      // et gérer l'authentification (par exemple, appeler un service d'authentification)
-    } else {
-      // Si le formulaire est invalide, affiche un message et marque tous les champs comme "touchés"
-      // Cela force l'affichage des messages d'erreur si l'utilisateur a essayé de soumettre un formulaire incomplet.
+  presentToast(message: string, color: string = 'danger') {
+    this.toastMessage = message;
+    this.toastColor = color;
+    this.isToastOpen = true;
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isToastOpen = isOpen;
+  }
+
+  // <-- NOUVELLE MÉTHODE : Pour basculer la visibilité du mot de passe
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  async onSubmit() {
+    this.isLoading = true;
+    this.isToastOpen = false;
+
+    if (this.loginForm.invalid) {
       console.log('Login form is invalid. Please check fields.');
       this.loginForm.markAllAsTouched();
+      this.presentToast('Veuillez remplir tous les champs correctement.', 'danger');
+      this.isLoading = false;
+      return;
+    }
+
+    const { email, password } = this.loginForm.value;
+
+    try {
+      const response = await firstValueFrom(this.authService.login({ email, password }));
+      console.log('Connexion réussie :', response);
+      this.presentToast('Connexion réussie ! Redirection...', 'success');
+
+      // IMPORTANT : Assurez-vous que '/dashboard' est la bonne route pour votre tableau de bord
+      // ou remplacez-la par l'URL correcte (ex: '/home')
+      setTimeout(() => {
+        this.router.navigateByUrl('/dashboard', { replaceUrl: true });
+      }, 1500);
+
+    } catch (error: any) {
+      console.error('Erreur lors de la connexion :', error);
+      let errorMessage = 'Une erreur est survenue lors de la connexion.';
+      if (error.error && error.error.msg) {
+        errorMessage = error.error.msg;
+      } else if (error.status === 0) {
+        errorMessage = "Impossible de se connecter au serveur. Vérifiez votre connexion ou l'état du backend.";
+      }
+      this.presentToast(errorMessage, 'danger');
+    } finally {
+      this.isLoading = false;
     }
   }
 }

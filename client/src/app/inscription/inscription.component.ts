@@ -2,45 +2,12 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// Assurez-vous d'importer NgForm si vous voulez utiliser la référence de template pour la validité du formulaire
-import { FormsModule, NgForm } from '@angular/forms'; // <-- Ajout de NgForm si besoin pour la validité du formulaire
-import { Router, RouterModule, RouterLink } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-// IMPORTS DES COMPOSANTS IONIC UTILISÉS
-import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
-  IonList, // Vérifié si utilisé dans le template, sinon c'est un avertissement
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonSelect,
-  IonSelectOption,
-  IonCheckbox, // Vérifié si utilisé dans le template, sinon c'est un avertissement
-  IonSpinner,
-  IonToast,
-  IonFab, // Vérifié si utilisé dans le template, sinon c'est un avertissement
-  IonFabButton, // Vérifié si utilisé dans le template, sinon c'est un avertissement
-  IonIcon,
-  IonNote,
-  IonButtons,
-  IonBackButton,
-  IonTextarea,
-  IonCardContent, // <-- AJOUTÉ pour résoudre 'ion-card-content' unknown element
-  IonText // <-- AJOUTÉ pour résoudre 'ion-text' unknown element
-} from '@ionic/angular/standalone';
-
-// Importez firstValueFrom
+import { IonicModule } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
-
 
 @Component({
   selector: 'app-inscription',
@@ -50,50 +17,20 @@ import { firstValueFrom } from 'rxjs';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
     RouterLink,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton,
-    IonSelect,
-    IonSelectOption,
-    IonCheckbox,
-    IonSpinner,
-    IonToast,
-    IonFab,
-    IonFabButton,
-    IonIcon,
-    IonNote,
-    IonButtons,
-    IonBackButton,
-    IonTextarea,
-    IonCardContent, // <-- AJOUTÉ
-    IonText // <-- AJOUTÉ
+    IonicModule
   ]
 })
 export class InscriptionComponent implements OnInit {
-  // Votre modèle de données pour le formulaire
   formData = {
-    username: '',
-    nom: '',
-    prenom: '',
+    username: '', // Le 'username' du backend, qui est le "Nom" de l'utilisateur
     email: '',
     password: '',
     confirmPassword: '',
-    role: '', // 'Etudiant' ou 'Enseignant'
-    niveauEtudes: [] as string[], // Pour les étudiants
-    sujetsEnseignes: [] as string[], // Pour les enseignants
-    bio: '' // Pour les enseignants
+    role: '',     // 'Etudiant' ou 'Enseignant' pour l'UI
+    niveauEtudes: '', // Reviens à une SEULE chaîne de caractères, comme attendu par le backend 'level'
+    sujetsEnseignes: [] as string[],
+    bio: ''
   };
   isLoading = false;
   isDataLoading = false;
@@ -103,9 +40,13 @@ export class InscriptionComponent implements OnInit {
   toastMessage = '';
   toastColor = 'danger';
 
-  niveauxEtudesList: string[] = ['Licence 1', 'Licence 2', 'Licence 3', 'Master 1', 'Master 2', 'Doctorat'];
-
-  // Typage strict pour sujetsList
+  niveauxEtudesList: { display: string, value: string }[] = [
+    { display: 'Licence 1', value: 'Licence1' },
+    { display: 'Licence 2', value: 'Licence2' },
+    { display: 'Licence 3', value: 'Licence3' },
+    { display: 'Master 1', value: 'Master1' },
+    { display: 'Master 2', value: 'Master2' }
+  ];
   sujetsList: { _id: string, name: string }[] = [];
 
   constructor(
@@ -117,80 +58,75 @@ export class InscriptionComponent implements OnInit {
     this.loadSujetsEnseignes();
   }
 
-  // Méthode pour charger les sujets enseignés depuis l'API via AuthService
   async loadSujetsEnseignes() {
     this.isDataLoading = true;
     try {
       const sujets = await firstValueFrom(this.authService.getSubjects());
-      // Assurez-vous que 'sujets' est bien un tableau (même vide si le backend ne retourne rien)
-      if (Array.isArray(sujets)) {
+      if (Array.isArray(sujets) && sujets.every(s => typeof s._id === 'string' && typeof s.name === 'string')) {
         this.sujetsList = sujets;
       } else {
         console.warn('Le backend a retourné un format inattendu pour les sujets:', sujets);
-        this.sujetsList = []; // Assurez-vous que c'est un tableau vide
+        this.sujetsList = [];
       }
       console.log('Sujets enseignés chargés depuis l\'API via AuthService:', this.sujetsList);
     } catch (error) {
       console.error('Erreur lors du chargement des sujets enseignés:', error);
-      this.setToast('Impossible de charger les sujets.', 'danger');
-      this.sujetsList = []; // En cas d'erreur, assurez-vous que la liste est vide
+      this.presentToast('Impossible de charger les matières enseignées. Veuillez réessayer.', 'danger');
+      this.sujetsList = [];
     } finally {
       this.isDataLoading = false;
     }
   }
 
-  // Fonction de validation côté client
   isValidForm(): boolean {
-    const { username, nom, prenom, email, password, confirmPassword, role, niveauEtudes, sujetsEnseignes } = this.formData;
+    // Les champs attendus par le backend (après modification du contrôleur) sont : username, email, password, level, role
+    const { username, email, password, confirmPassword, role, niveauEtudes, sujetsEnseignes, bio } = this.formData;
 
-    if (!username) { this.setToast('Le nom d\'utilisateur est requis.', 'danger'); return false; }
-    if (!nom) { this.setToast('Le nom est requis.', 'danger'); return false; }
-    if (!prenom) { this.setToast('Le prénom est requis.', 'danger'); return false; }
+    if (!username) { this.presentToast('Le nom d\'utilisateur est requis.', 'danger'); return false; }
+    // REMARQUE: Plus de validation 'nom' et 'prenom' ici
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // CORRECTION ICI : RETRAIT DES CARACTÈRES ÉCHAPPÉS BIZARRES
     if (!email || !emailRegex.test(email)) {
-      this.setToast('Veuillez entrer une adresse email valide.', 'danger');
+      this.presentToast('Veuillez entrer une adresse email valide.', 'danger');
       return false;
     }
 
-    if (!password) { this.setToast('Le mot de passe est requis.', 'danger'); return false; }
+    if (!password) { this.presentToast('Le mot de passe est requis.', 'danger'); return false; }
     const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    // CORRECTION ICI : RETRAIT DES CARACTÈRES ÉCHAPPÉS BIZARRES
     if (!passwordStrengthRegex.test(password)) {
-      this.setToast('Le mot de passe doit contenir au moins 6 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.', 'danger');
+      this.presentToast('Le mot de passe doit contenir au moins 6 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.', 'danger');
       return false;
     }
 
-    if (!confirmPassword) { this.setToast('La confirmation du mot de passe est requise.', 'danger'); return false; }
-    if (password !== confirmPassword) { this.setToast('Les mots de passe ne correspondent pas.', 'danger'); return false; }
+    if (!confirmPassword) { this.presentToast('La confirmation du mot de passe est requise.', 'danger'); return false; }
+    if (password !== confirmPassword) { this.presentToast('Les mots de passe ne correspondent pas.', 'danger'); return false; }
 
-    if (!role) { this.setToast('Veuillez sélectionner votre rôle.', 'danger'); return false; }
+    if (!role) { this.presentToast('Veuillez sélectionner votre rôle.', 'danger'); return false; }
 
-    if (role === 'Etudiant' && (!niveauEtudes || niveauEtudes.length === 0)) {
-      this.setToast('Veuillez sélectionner au moins un niveau d\'études.', 'danger');
-      return false;
-    }
-    if (role === 'Enseignant' && (!sujetsEnseignes || sujetsEnseignes.length === 0)) {
-      this.setToast('Veuillez sélectionner au moins une matière enseignée.', 'danger');
-      return false;
+    if (!niveauEtudes) {
+        this.presentToast('Veuillez sélectionner votre niveau d\'études.', 'danger');
+        return false;
     }
 
+    if (role === 'Enseignant') {
+        if (!sujetsEnseignes || sujetsEnseignes.length === 0) {
+            this.presentToast('Veuillez sélectionner au moins une matière enseignée.', 'danger');
+            return false;
+        }
+    }
     return true;
   }
 
-  async onSubmit(form: NgForm) { // Ajoutez 'form: NgForm' pour accéder à la validité du formulaire
+  async onSubmit(form: NgForm) {
     this.isLoading = true;
     this.isToastOpen = false;
 
-    // Utilisez la validité du formulaire Angular template-driven si disponible
-    if (form && form.invalid) { // Vérifiez si le formulaire est invalide via NgForm
-        this.setToast('Veuillez remplir tous les champs requis correctement.', 'danger');
+    if (form && form.invalid) {
+        this.presentToast('Veuillez remplir tous les champs requis correctement.', 'danger');
         this.isLoading = false;
         return;
     }
 
-    // Si vous préférez votre validation manuelle isValidForm()
     if (!this.isValidForm()) {
         this.isLoading = false;
         return;
@@ -199,23 +135,24 @@ export class InscriptionComponent implements OnInit {
     try {
       let dataToSend: any = {
         username: this.formData.username,
-        nom: this.formData.nom,
-        prenom: this.formData.prenom,
         email: this.formData.email,
         password: this.formData.password,
-        role: this.formData.role
+        level: this.formData.niveauEtudes,
+        role: this.formData.role === 'Etudiant' ? 'student' : 'tutor'
       };
 
-      if (this.formData.role === 'Etudiant') {
-        dataToSend.niveauEtudes = this.formData.niveauEtudes;
-      } else if (this.formData.role === 'Enseignant') {
-        dataToSend.sujetsEnseignes = this.formData.sujetsEnseignes;
-        dataToSend.bio = this.formData.bio;
+      if (this.formData.role === 'Enseignant') {
+        dataToSend.subjects = this.formData.sujetsEnseignes;
+        if (this.formData.bio) {
+          dataToSend.bio = this.formData.bio;
+        }
       }
+
+      console.log('Données envoyées au backend:', dataToSend);
 
       const response = await firstValueFrom(this.authService.register(dataToSend));
       console.log('Inscription réussie :', response);
-      this.setToast('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'success');
+      this.presentToast('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'success');
 
       setTimeout(() => {
         this.router.navigateByUrl('/login', { replaceUrl: true });
@@ -228,31 +165,17 @@ export class InscriptionComponent implements OnInit {
         errorMessage = error.error.message;
       } else if (error.message) {
         errorMessage = error.message;
+      } else if (error.status === 0) {
+        errorMessage = "Impossible de se connecter au serveur. Vérifiez votre connexion ou l'état du backend.";
       }
-      this.setToast(errorMessage, 'danger');
+      this.presentToast(errorMessage, 'danger');
     } finally {
       this.isLoading = false;
     }
   }
 
-  // Méthodes de visibilité des mots de passe
-  togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
-  }
-
-  toggleConfirmPasswordVisibility() {
-    this.showConfirmPassword = !this.showConfirmPassword;
-  }
-
-  // Méthode pour afficher le toast
-  setToast(message: string, color: string) {
-    this.toastMessage = message;
-    this.toastColor = color;
-    this.isToastOpen = true;
-  }
-
-  // Méthode pour fermer le toast (utilisée par (didDismiss) )
-  setOpen(isOpen: boolean) {
-    this.isToastOpen = isOpen;
-  }
+  togglePasswordVisibility() { this.showPassword = !this.showPassword; }
+  toggleConfirmPasswordVisibility() { this.showConfirmPassword = !this.showConfirmPassword; }
+  presentToast(message: string, color: string) { this.toastMessage = message; this.toastColor = color; this.isToastOpen = true; }
+  setOpen(isOpen: boolean) { this.isToastOpen = isOpen; }
 }

@@ -1,5 +1,6 @@
 <ion-header>
-  <ion-toolbar color="primary"> <ion-buttons slot="start">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/login"></ion-back-button>
     </ion-buttons>
     <ion-title>Inscription</ion-title>
@@ -20,38 +21,32 @@
           <ion-text color="medium">Chargement des options...</ion-text>
         </div>
 
-        <form #inscriptionForm="ngForm" (ngSubmit)="onSubmit(inscriptionForm)">
+        <form #inscriptionForm="ngForm" (ngSubmit)="onSubmit(inscriptionForm)" *ngIf="!isDataLoading">
+
           <ion-item>
             <ion-label position="floating">Nom d'utilisateur</ion-label>
-            <ion-input type="text" [(ngModel)]="formData.username" name="username" required></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="floating">Nom</ion-label>
-            <ion-input type="text" [(ngModel)]="formData.nom" name="nom" required></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label position="floating">Prénom</ion-label>
-            <ion-input type="text" [(ngModel)]="formData.prenom" name="prenom" required></ion-input>
+            <ion-input type="text" [(ngModel)]="formData.username" name="username" required autocomplete="username"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Email</ion-label>
-            <ion-input type="email" [(ngModel)]="formData.email" name="email" required></ion-input>
+            <ion-input type="email" [(ngModel)]="formData.email" name="email" required autocomplete="email"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="floating">Mot de passe</ion-label>
-            <ion-input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="formData.password" name="password" required></ion-input>
+            <ion-input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="formData.password" name="password" required autocomplete="new-password"></ion-input>
             <ion-button slot="end" fill="clear" (click)="togglePasswordVisibility()">
               <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
             </ion-button>
           </ion-item>
+          <ion-note color="medium" class="ion-padding-start ion-margin-bottom">
+            Min. 6 caractères, majuscule, minuscule, chiffre, caractère spécial.
+          </ion-note>
 
           <ion-item>
-            <ion-label position="floating">Confirmer le mot de passe</ion-label>
-            <ion-input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="formData.confirmPassword" name="confirmPassword" required></ion-input>
+            <ion-label position="floating">Confirmer mot de passe</ion-label>
+            <ion-input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="formData.confirmPassword" name="confirmPassword" required autocomplete="new-password"></ion-input>
             <ion-button slot="end" fill="clear" (click)="toggleConfirmPasswordVisibility()">
               <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
             </ion-button>
@@ -65,29 +60,30 @@
             </ion-select>
           </ion-item>
 
-          <ion-item *ngIf="formData.role === 'Etudiant'">
+          <ion-item>
             <ion-label position="floating">Niveau d'études</ion-label>
-            <ion-select [(ngModel)]="formData.niveauEtudes" name="niveauEtudes" multiple="true" interface="popover" placeholder="Sélectionnez vos niveaux">
-              <ion-select-option *ngFor="let level of niveauxEtudesList" [value]="level">{{ level }}</ion-select-option>
+            <ion-select [(ngModel)]="formData.niveauEtudes" name="niveauEtudes" multiple="false" interface="popover" placeholder="Sélectionnez votre niveau" required>
+              <ion-select-option *ngFor="let level of niveauxEtudesList" [value]="level.value">{{ level.display }}</ion-select-option>
             </ion-select>
           </ion-item>
 
-          <ion-item *ngIf="formData.role === 'Enseignant'">
-            <ion-label position="floating">Matières enseignées</ion-label>
-            <ion-select [(ngModel)]="formData.sujetsEnseignes" name="sujetsEnseignes" multiple="true" required [disabled]="isDataLoading" interface="popover" placeholder="Sélectionnez les matières">
-              <ion-select-option *ngFor="let subject of sujetsList" [value]="subject._id">{{ subject.name }}</ion-select-option>
-            </ion-select>
-          </ion-item>
-          <ion-item *ngIf="formData.role === 'Enseignant'">
-            <ion-label position="floating">Biographie</ion-label>
-            <ion-textarea [(ngModel)]="formData.bio" name="bio" rows="4"></ion-textarea>
-          </ion-item>
+          <ng-container *ngIf="formData.role === 'Enseignant'">
+            <ion-item>
+              <ion-label position="floating">Matières enseignées</ion-label>
+              <ion-select [(ngModel)]="formData.sujetsEnseignes" name="sujetsEnseignes" multiple="true" required interface="popover" placeholder="Sélectionnez les matières">
+                <ion-select-option *ngFor="let subject of sujetsList" [value]="subject._id">{{ subject.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Biographie (Optionnel)</ion-label> <ion-textarea [(ngModel)]="formData.bio" name="bio" rows="4"></ion-textarea>
+            </ion-item>
+          </ng-container>
+
+          <ion-button expand="block" type="submit" [disabled]="isLoading || inscriptionForm.invalid">
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+            <span *ngIf="!isLoading">S'inscrire</span>
+          </ion-button>
         </form>
-
-        <ion-button expand="block" type="submit" [disabled]="isLoading || inscriptionForm.invalid" (click)="onSubmit(inscriptionForm)">
-          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
-          <span *ngIf="!isLoading">S'inscrire</span>
-        </ion-button>
 
         <p class="ion-text-center ion-margin-top">
           Déjà un compte ? <a routerLink="/login">Connectez-vous ici</a>

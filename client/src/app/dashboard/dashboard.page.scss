@@ -1,433 +1,409 @@
 /* src/app/dashboard/dashboard.page.scss */
 
+// Variables pour un thème clair/doux (inspiré de la maquette)
+// Vous pouvez les adapter à votre thème Ionic global si nécessaire.
 :root {
-    --ion-color-primary: #5260ff;
-    --ion-color-primary-rgb: 82, 96, 255;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-shade: #4854e0;
-    --ion-color-primary-tint: #6370ff;
-    --ion-color-secondary: #00b8d4;
-    --ion-color-secondary-rgb: 0, 184, 212;
-    --ion-color-secondary-contrast: #ffffff;
-    --ion-color-secondary-shade: #00a2bb;
-    --ion-color-secondary-tint: #1ac0d8;
-    --ion-color-tertiary: #ffab40;
-    --ion-color-tertiary-rgb: 255, 171, 64;
-    --ion-color-tertiary-contrast: #ffffff;
-    --ion-color-tertiary-shade: #e09738;
-    --ion-color-tertiary-tint: #ffb553;
-    --ion-color-success: #2dd36f;
-    --ion-color-warning: #ffc409;
-    --ion-color-danger: #eb445a;
-    --ion-color-light: #F0F2F5;
-    --ion-color-medium: #ced4da;
-    --ion-color-dark: #343a40;
-    --card-bg-color: #ffffff;
-    --text-color-primary: #212529;
-    --text-color-secondary: #6c757d;
-    --border-radius-card: 12px;
-    --shadow-card: 0 4px 10px rgba(0, 0, 0, 0.05);
-    --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.1);
-    --action-search-color: #6a8aff;
-    --action-planning-color: #a36aff;
-    --action-chat-color: #6aff8a;
-    --action-faq-color: #ff8a6a;
+  --ion-color-primary: #5260ff; // Couleur primaire Ionic (bleu par défaut)
+  --ion-color-primary-rgb: 82, 96, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #4854e0;
+  --ion-color-primary-tint: #6370ff;
+  --ion-color-secondary: #50c8ff; // Couleur secondaire Ionic (bleu clair par défaut)
+  --ion-color-secondary-rgb: 80, 200, 255;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #46b0e0;
+  --ion-color-secondary-tint: #62ceff;
+  --ion-color-tertiary: #5260ff; // Utilisons la même que primary pour la consistance visuelle de la maquette
+  --ion-color-tertiary-rgb: 82, 96, 255;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #4854e0;
+  --ion-color-tertiary-tint: #6370ff;
+  --ion-color-success: #2dd36f; // Vert pour le succès/présentiel
+  --ion-color-warning: #ffc409; // Jaune pour l'avertissement
+  --ion-color-danger: #eb445a; // Rouge pour le danger
+  --ion-color-light: #f4f5f8; // Couleur de fond générale claire
+  --ion-color-medium: #92949c; // Gris moyen
+  --ion-color-dark: #222428; // Texte sombre
+  // Couleurs spécifiques pour le dashboard
+  --dashboard-bg-color: var(--ion-color-light); // Fond général du contenu
+  --card-bg-color: #ffffff; // Fond des cartes
+  --text-color-dark: var(--ion-color-dark);
+  --text-color-medium: var(--ion-color-medium);
+  --border-color: #e0e0e0; // Couleur des bordures subtiles
 }
 
-body {
-    --ion-background-color: var(--ion-color-light);
-    --ion-text-color: var(--text-color-primary);
-}
+/* Forcer le mode clair spécifiquement pour cette page/ce composant */
+:host {
+  ion-content {
+    --background: var(--dashboard-bg-color, #f4f5f8); /* Utilise la variable ou une couleur de repli */
+    --color: var(--text-color-dark, #222428); /* Définit la couleur du texte par défaut pour le contenu */
+  }
 
-.dashboard-content {
-    --background: var(--ion-color-light);
-    padding: 0;
-    .main-content-wrapper {
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-    .welcome-section,
-    .quick-actions-section,
-    .upcoming-sessions-section,
-    .stats-section {
-        margin-bottom: 24px;
-    }
-    .section-title {
-        display: flex;
-        align-items: center;
-        font-size: 1.05em;
-        font-weight: 700;
-        color: var(--text-color-primary);
-        margin-bottom: 15px;
-        ion-icon {
-            margin-inline-end: 8px;
-            color: var(--ion-color-primary);
-            font-size: 1.25em;
-        }
-    }
-}
-
-ion-toolbar {
+  // S'assurer que les barres d'outils et autres éléments Ionic respectent le thème clair
+  ion-toolbar {
     --background: var(--ion-color-primary);
     --color: var(--ion-color-primary-contrast);
+  }
+
+  ion-header {
+    --background: var(--ion-color-primary); // Assurez-vous que le header a aussi la bonne couleur de fond
+    --color: var(--ion-color-primary-contrast); // Couleur du texte du header
+  }
+
+  // Appliquer des couleurs de texte explicites aux éléments qui pourraient hériter des couleurs du mode sombre
+  h1, h2, h3, h4, h5, h6, p, span, div {
+      color: var(--text-color-dark);
+  }
+  // Corriger les couleurs de texte spécifiques si nécessaire, par exemple dans les cartes
+  .welcome-card h1, .welcome-card h2, .welcome-card .welcome-question {
+      color: var(--ion-color-primary-contrast); // Texte blanc sur le dégradé bleu
+  }
+  .action-content h4 {
+      color: var(--text-color-dark);
+  }
+  .action-content p {
+      color: var(--text-color-medium);
+  }
+  .session-info h4 {
+      color: var(--text-color-dark);
+  }
+  .session-info p {
+      color: var(--text-color-medium);
+  }
+  .stat-item .stat-label {
+      color: var(--text-color-medium);
+  }
+}
+
+
+// Styles généraux pour le contenu du dashboard
+.dashboard-content {
+  /* Le --background et --color sont maintenant gérés par :host ion-content */
+  padding: 16px; // Espacement intérieur général
+  width: 100%; /* S'assure que le contenu prend toute la largeur disponible */
+  box-sizing: border-box; /* Inclut le padding dans la largeur totale */
+
+  // Sections
+  .welcome-section,
+  .quick-actions-section,
+  .upcoming-sessions-section,
+  .stats-section {
+    margin-bottom: 24px; // Espacement entre les sections
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--text-color-dark); // Force la couleur du titre de section
+    margin-bottom: 15px;
+    ion-icon {
+      margin-inline-end: 8px; // Espace entre l'icône et le texte
+      color: var(--ion-color-primary); // Couleur de l'icône
+      font-size: 1.4em;
+    }
+  }
+}
+
+// --- Header ---
+ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
 }
 
 .header-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em; // Taille du texte dans le header
+  font-weight: bold;
+  ion-icon {
+    margin-inline-end: 8px;
+    font-size: 1.5em; // Taille de l'icône dans le header
+  }
+}
+
+// --- Section de bienvenue ---
+.welcome-section {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 30px; // Plus d'espace après la section de bienvenue
+  .welcome-card {
+    background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-tertiary));
+    color: var(--ion-color-primary-contrast);
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(var(--ion-color-primary-rgb), 0.2); // Ombre plus douce
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    .welcome-icon {
+      font-size: 3em; // Grande icône emoji
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 1.8em;
+      margin: 5px 0;
+      color: var(--ion-color-primary-contrast); // S'assurer que le texte est blanc
+    }
+    h2 {
+      font-size: 1.2em;
+      margin: 0 0 10px;
+      color: rgba(var(--ion-color-primary-contrast-rgb), 0.9); // Légèrement transparent
+      font-weight: normal;
+    }
+    .app-name {
+      font-weight: bold;
+    }
+    .welcome-question {
+      font-size: 0.9em;
+      opacity: 0.8;
+      margin-top: 15px;
+      color: var(--ion-color-primary-contrast); // Assurer que la question est également claire
+    }
+  }
+}
+
+// --- Section Actions rapides ---
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); // Colonnes responsives
+  gap: 15px; // Espacement entre les cartes
+  .action-card {
+    background: var(--card-bg-color); // Fond blanc pour les cartes
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); // Ombre légère
+    display: flex;
+    align-items: center; // Aligner icône et texte
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid var(--border-color); // Bordure subtile
+    &:hover {
+      transform: translateY(-3px); // Effet de survol
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+    .action-icon {
+      flex-shrink: 0; // Empêche l'icône de rétrécir
+      width: 45px;
+      height: 45px;
+      border-radius: 50%; // Cercle pour l'icône
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-inline-end: 15px; // Espace entre l'icône et le contenu
+      font-size: 1.8em; // Taille des icônes
+      color: #ffffff; // Icône blanche
+      &.search-icon {
+        background: var(--ion-color-primary);
+      }
+      &.planning-icon {
+        background: var(--ion-color-secondary);
+      }
+      &.chat-icon {
+        background: var(--ion-color-tertiary);
+      } // Utilise tertiary pour un look distinct
+      &.faq-icon {
+        background: var(--ion-color-warning);
+      } // Une couleur différente pour FAQ
+      ion-icon {
+        --ionicon-color: #ffffff; // Assure la couleur de l'icône à l'intérieur du cercle
+      }
+    }
+    .action-content {
+      flex-grow: 1; // Permet au contenu de prendre l'espace disponible
+      h4 {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: var(--text-color-dark); // Force la couleur du titre
+        margin: 0 0 4px;
+      }
+      p {
+        font-size: 0.85em;
+        color: var(--text-color-medium); // Force la couleur du paragraphe
+        margin: 0;
+      }
+    }
+    .action-arrow {
+      flex-shrink: 0;
+      font-size: 1.3em;
+      color: var(--ion-color-medium);
+      margin-inline-start: 10px; // Espace avant la flèche
+    }
+  }
+}
+
+// --- Section Prochaines séances ---
+.upcoming-sessions-section {
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      font-size: 0.8em;
+      text-transform: capitalize; // Pas de majuscules automatiques
+    }
+  }
+  .sessions-list {
+    display: grid;
+    gap: 15px; // Espacement entre les séances
+  }
+  .session-card {
+    background: var(--card-bg-color); // Fond blanc pour les cartes
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
-    font-size: 1.1em;
-    font-weight: bold;
-    ion-icon {
-        margin-inline-end: 8px;
-        font-size: 1.3em;
-        color: var(--ion-color-primary-contrast);
+    border: 1px solid var(--border-color);
+    .session-date {
+      flex-shrink: 0;
+      text-align: center;
+      margin-inline-end: 15px;
+      padding-inline-end: 15px;
+      border-inline-end: 1px solid var(--border-color); // Séparateur vertical
+      .day {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: var(--ion-color-primary);
+        line-height: 1;
+      }
+      .month {
+        font-size: 0.8em;
+        text-transform: uppercase;
+        color: var(--text-color-medium);
+      }
     }
-}
-
-.welcome-section {
+    .session-info {
+      flex-grow: 1;
+      h4 {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: var(--text-color-dark); // Force la couleur du titre
+        margin: 0 0 5px;
+      }
+      p {
+        display: flex;
+        align-items: center;
+        font-size: 0.9em;
+        color: var(--text-color-medium); // Force la couleur du paragraphe
+        margin: 0 0 3px;
+        ion-icon {
+          margin-inline-end: 5px;
+          font-size: 1em;
+          color: var(--ion-color-medium);
+        }
+      }
+    }
+    .session-mode {
+      flex-shrink: 0;
+      margin-inline-start: 15px;
+      ion-badge {
+        font-size: 0.8em;
+        padding: 6px 10px;
+        border-radius: 5px;
+        text-transform: capitalize;
+      }
+    }
+  }
+  .no-sessions {
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    .welcome-card {
-        background: linear-gradient(135deg, var(--ion-color-primary), #7a8cff);
-        color: var(--ion-color-primary-contrast);
-        padding: 25px 20px;
-        border-radius: var(--border-radius-card);
-        box-shadow: var(--shadow-card);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        overflow: hidden;
-        .welcome-icon {
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            animation: bounceIn 0.8s ease-out;
-        }
-        h1 {
-            font-size: 1.5em;
-            margin: 5px 0;
-            color: var(--ion-color-primary-contrast);
-            font-weight: 700;
-        }
-        h2 {
-            font-size: 1em;
-            margin: 0 0 10px;
-            color: rgba(var(--ion-color-primary-contrast-rgb), 0.9);
-            font-weight: normal;
-        }
-        .app-name {
-            font-weight: bold;
-        }
-        .welcome-question {
-            font-size: 0.85em;
-            opacity: 0.8;
-            margin-top: 15px;
-        }
+    padding: 30px 20px;
+    background: var(--card-bg-color); // Fond blanc
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    .no-sessions-icon {
+      font-size: 3em;
+      margin-bottom: 15px;
     }
+    h4 {
+      font-size: 1.3em;
+      color: var(--text-color-dark); // Force la couleur du titre
+      margin: 0 0 10px;
+    }
+    p {
+      font-size: 0.9em;
+      color: var(--text-color-medium); // Force la couleur du paragraphe
+      margin-bottom: 20px;
+    }
+  }
 }
 
-.actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-    .action-card {
-        background: var(--card-bg-color);
-        padding: 15px;
-        border-radius: var(--border-radius-card);
-        box-shadow: var(--shadow-card);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        cursor: pointer;
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        border: none;
-        position: relative;
-        &:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-        .action-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 1.8em;
-            color: #ffffff;
-            &.search-icon {
-                background: var(--action-search-color);
-            }
-            &.planning-icon {
-                background: var(--action-planning-color);
-            }
-            &.chat-icon {
-                background: var(--action-chat-color);
-            }
-            &.faq-icon {
-                background: var(--action-faq-color);
-            }
-            ion-icon {
-                --ionicon-color: #ffffff;
-            }
-        }
-        .action-content {
-            h4 {
-                font-size: 0.95em;
-                font-weight: bold;
-                color: var(--text-color-primary);
-                margin: 0 0 2px;
-            }
-            p {
-                font-size: 0.75em;
-                color: var(--text-color-secondary);
-                margin: 0;
-            }
-        }
-        .action-arrow {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            font-size: 1em;
-            color: var(--ion-color-medium);
-            opacity: 0.7;
-        }
-    }
-}
-
-.upcoming-sessions-section {
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-        ion-button {
-            --padding-start: 8px;
-            --padding-end: 8px;
-            font-size: 0.75em;
-            text-transform: capitalize;
-            --border-radius: 5px;
-            font-weight: 500;
-        }
-    }
-    .sessions-list {
-        display: grid;
-        gap: 10px;
-    }
-    .session-card {
-        background: var(--card-bg-color);
-        padding: 12px;
-        border-radius: var(--border-radius-card);
-        box-shadow: var(--shadow-card);
-        display: flex;
-        align-items: center;
-        border: none;
-        transition: transform 0.2s ease-out;
-        &:hover {
-            transform: translateY(-2px);
-        }
-        .session-date {
-            flex-shrink: 0;
-            text-align: center;
-            margin-inline-end: 12px;
-            padding-inline-end: 12px;
-            border-inline-end: 1px solid var(--ion-color-medium);
-            opacity: 0.9;
-            .day {
-                font-size: 1.6em;
-                font-weight: 700;
-                color: var(--ion-color-primary);
-                line-height: 1;
-            }
-            .month {
-                font-size: 0.7em;
-                text-transform: uppercase;
-                color: var(--text-color-secondary);
-            }
-        }
-        .session-info {
-            flex-grow: 1;
-            h4 {
-                font-size: 0.95em;
-                font-weight: bold;
-                color: var(--text-color-primary);
-                margin: 0 0 3px;
-            }
-            p {
-                display: flex;
-                align-items: center;
-                font-size: 0.8em;
-                color: var(--text-color-secondary);
-                margin: 0 0 1px;
-                ion-icon {
-                    margin-inline-end: 5px;
-                    font-size: 0.9em;
-                    color: var(--ion-color-primary);
-                }
-            }
-        }
-        .session-mode {
-            flex-shrink: 0;
-            margin-inline-start: 8px;
-            ion-badge {
-                font-size: 0.7em;
-                padding: 4px 7px;
-                border-radius: 5px;
-                font-weight: 600;
-                text-transform: capitalize;
-            }
-        }
-    }
-    .no-sessions {
-        text-align: center;
-        padding: 25px 15px;
-        background: var(--card-bg-color);
-        border-radius: var(--border-radius-card);
-        box-shadow: var(--shadow-card);
-        border: none;
-        .no-sessions-icon {
-            font-size: 2.5em;
-            margin-bottom: 12px;
-            color: var(--ion-color-medium);
-        }
-        h4 {
-            font-size: 1.1em;
-            color: var(--text-color-primary);
-            margin: 0 0 8px;
-        }
-        p {
-            font-size: 0.85em;
-            color: var(--text-color-secondary);
-            margin-bottom: 15px;
-        }
-        ion-button {
-            --border-radius: 6px;
-            font-weight: 600;
-            ion-icon {
-                margin-inline-end: 3px;
-            }
-        }
-    }
-}
-
+// --- Section Statistiques ---
 .stats-section {
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 12px;
-        .stat-item {
-            background: var(--card-bg-color);
-            padding: 18px 8px;
-            border-radius: var(--border-radius-card);
-            box-shadow: var(--shadow-card);
-            text-align: center;
-            border: none;
-            transition: transform 0.2s ease-out;
-            &:hover {
-                transform: translateY(-2px);
-            }
-            .stat-number {
-                font-size: 1.6em;
-                font-weight: 700;
-                color: var(--ion-color-primary);
-                margin-bottom: 4px;
-            }
-            .stat-label {
-                font-size: 0.75em;
-                color: var(--text-color-secondary);
-                font-weight: 500;
-            }
-        }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); // 3 colonnes responsives
+    gap: 15px;
+    .stat-item {
+      background: var(--card-bg-color); // Fond blanc
+      padding: 20px 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      border: 1px solid var(--border-color);
+      .stat-number {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: var(--ion-color-primary);
+        margin-bottom: 5px;
+      }
+      .stat-label {
+        font-size: 0.85em;
+        color: var(--text-color-medium); // Force la couleur du label
+      }
     }
+  }
 }
 
+// --- Footer / Barre de navigation inférieure ---
 ion-footer {
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
-    background: var(--card-bg-color);
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
 }
 
 ion-tab-bar {
-    --background: var(--card-bg-color);
-    --border: none;
-    padding-bottom: env(safe-area-inset-bottom);
-    ion-tab-button {
-        --color: var(--text-color-secondary);
-        --color-selected: var(--ion-color-primary);
-        transition: all 0.2s ease-out;
-        ion-icon {
-            font-size: 1.5em;
-            margin-bottom: 2px;
-            transition: transform 0.2s ease-out;
-        }
-        ion-label {
-            font-size: 0.7em;
-            font-weight: 600;
-            transition: color 0.2s ease-out;
-        }
-        &.tab-selected {
-            ion-icon {
-                transform: translateY(-1px) scale(1.05);
-                color: var(--ion-color-primary);
-            }
-            ion-label {
-                color: var(--ion-color-primary);
-            }
-        }
+  --background: var(--card-bg-color); // Fond blanc pour la barre
+  --border: none;
+  padding-bottom: env(safe-area-inset-bottom);
+  ion-tab-button {
+    --color: var(--ion-color-medium);
+    --color-selected: var(--ion-color-primary);
+    &.tab-selected {
+      ion-icon {
+        transform: translateY(-2px);
+      }
+      ion-label {
+        font-weight: bold;
+      }
     }
+  }
 }
 
-@keyframes bounceIn {
-    0%,
-    20%,
-    40%,
-    60%,
-    80%,
-    100% {
-        transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-    }
-    0% {
-        opacity: 0;
-        transform: scale3d(0.3, 0.3, 0.3);
-    }
-    20% {
-        transform: scale3d(1.1, 1.1, 1.1);
-    }
-    40% {
-        transform: scale3d(0.9, 0.9, 0.9);
-    }
-    60% {
-        opacity: 1;
-        transform: scale3d(1.03, 1.03, 1.03);
-    }
-    80% {
-        transform: scale3d(0.97, 0.97, 0.97);
-    }
-    100% {
-        opacity: 1;
-        transform: scale3d(1, 1, 1);
-    }
-}
-
+// Media queries pour l'adaptation responsive
 @media (min-width: 768px) {
-    .main-content-wrapper {
-        padding: 24px;
-    }
-    .actions-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+  /*
+  .dashboard-content {
+      max-width: 900px;
+      margin: 0 auto;
+  }
+  */
+  .actions-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
