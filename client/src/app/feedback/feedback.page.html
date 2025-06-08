@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button> </ion-buttons>
+    <ion-title>Évaluer la Séance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Évaluer la Séance</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="feedback-container">
+    <h2>Donnez votre avis sur la séance</h2>
+
+    <div class="star-rating">
+      <ion-icon
+        *ngFor="let star of [1, 2, 3, 4, 5]"
+        [name]="rating >= star ? 'star' : 'star-outline'"
+        [class.selected]="rating >= star"
+        (click)="setRating(star)"
+      ></ion-icon>
+    </div>
+
+    <ion-item>
+      <ion-textarea
+        label="Commentaire"
+        labelPlacement="floating"
+        placeholder="Écrivez votre commentaire ici..."
+        rows="5"
+        [(ngModel)]="comment"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-button expand="block" (click)="submitFeedback()">Envoyer le Feedback</ion-button>
+
+    <ion-list *ngIf="oldFeedbacks && oldFeedbacks.length > 0">
+        <ion-list-header>
+            <ion-label>Anciens Feedbacks</ion-label>
+        </ion-list-header>
+
+        <ion-item *ngFor="let feedback of oldFeedbacks">
+            <ion-label>
+                <h3>Notation: {{ feedback.rating }} / 5</h3>
+                <p>{{ feedback.comment }}</p>
+                <p><small>De: {{ feedback.userName }} - Le: {{ feedback.date | date:'short' }}</small></p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+    <p *ngIf="!oldFeedbacks || oldFeedbacks.length === 0" class="no-feedback-message">Aucun feedback trouvé pour le moment.</p>
+
+  </div>
+</ion-content>

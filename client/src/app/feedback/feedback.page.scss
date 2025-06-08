@@ -1,0 +1,44 @@
+.feedback-container {
+  padding: 20px;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 30px;
+    color: var(--ion-color-primary); // Utilise la couleur primaire de Ionic
+  }
+
+  .star-rating {
+    font-size: 3em; // Taille des étoiles
+    color: lightgray; // Couleur par défaut des étoiles non sélectionnées
+    margin-bottom: 30px;
+
+    ion-icon {
+      cursor: pointer; // Indique que l'icône est cliquable
+      transition: color 0.2s ease-in-out; // Animation douce pour le changement de couleur
+    }
+
+    ion-icon.selected {
+      color: gold; // Couleur des étoiles sélectionnées
+    }
+  }
+
+  ion-textarea {
+    --padding-start: 0; // Ajustement du padding pour le textarea
+    --padding-end: 0;
+    margin-bottom: 20px;
+  }
+
+  ion-button {
+    margin-top: 20px;
+  }
+
+  ion-list {
+    margin-top: 40px;
+    text-align: left;
+  }
+
+  .no-feedback-message {
+    margin-top: 30px;
+    color: var(--ion-color-medium);
+  }
+}
