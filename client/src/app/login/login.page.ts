@@ -1,138 +1,72 @@
-// src/app/login/login.page.ts
-
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Importations essentielles pour les formulaires réactifs
+import { RouterModule } from '@angular/router'; // Pour la navigation avec routerLink
+
+// Importez IonicModule pour rendre tous les composants Ionic disponibles.
+// Vous pouvez importer les composants individuels utilisés (IonHeader, etc.) pour une meilleure clarté
+// et pour que l'éditeur de code vous aide avec l'autocomplétion.
+// Les composants qui ne sont pas utilisés dans le template HTML généreront un avertissement (WARNING),
+// mais ne bloqueront pas la compilation. J'ai inclus ceux qui sont probablement utilisés dans votre HTML.
 import {
-  LoadingController,
-  AlertController,
-  ToastController,
-  // Composants Ionic déjà présents :
-  IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonButton, IonItem, IonLabel,
-  // *** NOUVEAUX IMPORTS À AJOUTER ICI ***
-  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonText, IonIcon // Ajout de IonIcon si tu l'utilises
-} from '@ionic/angular/standalone'; // N'oublie pas le /standalone à la fin
+  IonicModule,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardContent,
+  IonItem,
+  IonInput,
+  IonButton,
+  IonLabel,
+  IonNote // <-- Indispensable pour les messages d'erreur de validation
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: true,
+  standalone: true, // Ceci indique à Angular que ce composant est autonome
   imports: [
     CommonModule,
-    FormsModule,
-    RouterModule,
-    // Composants Ionic déjà présents dans le tableau imports :
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonInput,
-    IonButton,
-    IonItem,
-    IonLabel,
-    // *** AJOUTE CES NOUVEAUX COMPOSANTS DANS LE TABLEAU imports ***
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonCardContent,
-    IonText,
-    IonIcon // Ajoute IonIcon si tu l'utilises dans ton HTML
-  ]
+    ReactiveFormsModule, // <-- C'est LE MODULE qui active les formulaires réactifs (et donc [formGroup])
+    RouterModule,        // <-- Nécessaire si vous utilisez routerLink dans votre HTML
+    IonicModule          // <-- C'est LE MODULE qui rend tous les composants Ionic (ion-input, ion-button, ion-note, etc.) reconnus
+  ],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit { // Le nom de la classe doit correspondre à 'LoginPage'
+  loginForm!: FormGroup; // Déclaration du formulaire réactif. Le '!' indique qu'il sera initialisé plus tard.
 
-  email!: string;
-  password!: string;
+  // Injection du service FormBuilder pour construire le formulaire
+  constructor(private fb: FormBuilder) {}
 
-  constructor(
-    private router: Router,
-    private loadingController: LoadingController,
-    private alertController: AlertController,
-    private toastController: ToastController,
-    private http: HttpClient
-  ) { }
-
+  // ngOnInit est un hook de cycle de vie Angular où l'on initialise le formulaire
   ngOnInit() {
-    // ...
-  }
-
-  async onLogin() {
-    // ... (ton code onLogin() inchangé)
-    if (!this.email || !this.password) {
-      this.presentToast('Veuillez remplir tous les champs.', 'danger');
-      return;
-    }
-
-    let loading: HTMLIonLoadingElement | null = null;
-
-    try {
-      loading = await this.loadingController.create({
-        message: 'Connexion en cours...',
-      });
-      await loading.present();
-
-      const loginData = {
-        email: this.email,
-        password: this.password
-      };
-
-      this.http.post('YOUR_BACKEND_API_URL/login', loginData).subscribe({
-        next: async (response: any) => {
-          if (loading) {
-            await loading.dismiss();
-          }
-          if (response && response.success) {
-            this.presentToast('Connexion réussie !', 'success');
-            if (response.token) {
-              localStorage.setItem('authToken', response.token);
-            }
-            this.router.navigateByUrl('/dashboard', { replaceUrl: true });
-          } else {
-            this.presentAlert('Erreur de connexion', response.message || 'Identifiants incorrects.');
-          }
-        },
-        error: async (error) => {
-          if (loading) {
-            await loading.dismiss();
-          }
-          console.error('Erreur lors de la connexion :', error);
-          if (error.status === 401) {
-            this.presentAlert('Connexion échouée', 'Email ou mot de passe incorrect.');
-          } else {
-            this.presentAlert('Erreur réseau', 'Une erreur est survenue lors de la connexion. Veuillez réessayer.');
-          }
-        }
-      });
-
-    } catch (error) {
-      if (loading) {
-          await loading.dismiss();
-      }
-      console.error('Erreur inattendue :', error);
-      this.presentAlert('Erreur', 'Une erreur inattendue est survenue.');
-    }
-  }
-
-  async presentAlert(header: string, message: string) {
-    const alert = await this.alertController.create({
-      header: header,
-      message: message,
-      buttons: ['OK'],
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]], // Champ email avec validation requise et format email
+      password: ['', Validators.required], // Champ mot de passe avec validation requise
     });
-    await alert.present();
   }
 
-  async presentToast(message: string, color: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 3000,
-      color: color,
-      position: 'bottom'
-    });
-    await toast.present();
+  // Getter 'f' pour accéder facilement aux contrôles du formulaire dans le template HTML
+  // Par exemple, f['email'] au lieu de loginForm.controls['email']
+  get f() {
+    return this.loginForm.controls;
+  }
+
+  // Méthode appelée lorsque le formulaire est soumis
+  onSubmit() {
+    if (this.loginForm.valid) {
+      // Si le formulaire est valide, affiche ses valeurs dans la console
+      console.log('Login Form Submitted:', this.loginForm.value);
+      // Ici, vous ajouteriez la logique pour envoyer les données au serveur
+      // et gérer l'authentification (par exemple, appeler un service d'authentification)
+    } else {
+      // Si le formulaire est invalide, affiche un message et marque tous les champs comme "touchés"
+      // Cela force l'affichage des messages d'erreur si l'utilisateur a essayé de soumettre un formulaire incomplet.
+      console.log('Login form is invalid. Please check fields.');
+      this.loginForm.markAllAsTouched();
+    }
   }
 }
