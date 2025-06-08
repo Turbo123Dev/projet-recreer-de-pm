@@ -1,6 +1,79 @@
+/* feedback.page.scss */
+
+// Définition des variables de couleurs pour un thème clair
+// Assurez-vous que ces variables correspondent à celles définies globalement
+// ou dans votre dashboard.page.scss pour une cohérence.
+:root {
+  --ion-color-primary: #5260ff; // Couleur primaire Ionic (bleu par défaut)
+  --ion-color-primary-rgb: 82, 96, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #4854e0;
+  --ion-color-primary-tint: #6370ff;
+
+  --ion-color-medium: #92949c; // Gris moyen
+  --ion-color-dark: #222428; // Texte sombre
+  --ion-color-light: #f4f5f8; // Couleur de fond générale claire
+
+  --feedback-bg-color: var(--ion-color-light); // Fond général du contenu
+  --card-bg-color: #ffffff; // Fond des éléments de liste ou cartes si utilisés
+  --text-color-dark: var(--ion-color-dark);
+  --text-color-medium: var(--ion-color-medium);
+}
+
+
+/* Forcer le mode clair spécifiquement pour cette page/ce composant de feedback */
+:host {
+  ion-content {
+    --background: var(--feedback-bg-color, #f4f5f8); /* Fond clair */
+    --color: var(--text-color-dark, #222428);      /* Texte sombre par défaut */
+  }
+
+  // S'assurer que les barres d'outils (header) respectent le thème clair
+  ion-toolbar {
+    --background: var(--ion-color-primary); // Ou une autre couleur de votre choix pour le header
+    --color: var(--ion-color-primary-contrast); // Texte blanc pour le header
+  }
+
+  ion-header {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+  }
+
+  // Appliquer des couleurs de texte explicites aux éléments HTML qui pourraient être affectés par le mode sombre
+  h1, h2, h3, h4, h5, h6, p, span, div, li, a {
+      color: var(--text-color-dark);
+  }
+
+  // S'assurer que les éléments Ionic spécifiques conservent le bon contraste
+  ion-item {
+    --background: var(--card-bg-color, #ffffff); // Fond blanc pour les items de liste
+    --color: var(--text-color-dark, #222428);   // Texte sombre pour les items de liste
+  }
+
+  // Si vous avez un ion-card dans le feedback, appliquez-lui aussi le fond blanc
+  ion-card {
+    --background: var(--card-bg-color, #ffffff);
+    --color: var(--text-color-dark, #222428);
+  }
+
+  ion-textarea {
+    // S'assurer que le textarea a un fond clair et un texte sombre
+    --background: var(--card-bg-color, #ffffff);
+    --color: var(--text-color-dark, #222428);
+    // Ajoutez une bordure si nécessaire pour le différencier du fond
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 8px;
+    padding: 10px; /* Ajout d'un padding pour un meilleur rendu */
+  }
+}
+
+
+// Styles spécifiques au conteneur de feedback
 .feedback-container {
   padding: 20px;
   text-align: center;
+  background: var(--feedback-bg-color); // S'assurer que le conteneur utilise le fond clair si besoin
 
   h2 {
     margin-bottom: 30px;
@@ -23,8 +96,8 @@
   }
 
   ion-textarea {
-    --padding-start: 0; // Ajustement du padding pour le textarea
-    --padding-end: 0;
+    // Les propriétés CSS personnalisées --padding-start et --padding-end
+    // sont mieux gérées au niveau du :host ion-textarea
     margin-bottom: 20px;
   }
 
@@ -35,10 +108,12 @@
   ion-list {
     margin-top: 40px;
     text-align: left;
+    // S'assurer que la liste elle-même a un fond clair
+    --background: var(--feedback-bg-color, #f4f5f8);
   }
 
   .no-feedback-message {
     margin-top: 30px;
-    color: var(--ion-color-medium);
+    color: var(--ion-color-medium); // Utilise la couleur medium pour un texte moins prononcé
   }
 }
