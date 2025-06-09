@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connexion MongoDB
-mongoose.connect('mongodb://localhost:27017/soutiens_moi', {});
+mongoose.connect('mongodb://localhost:27017/soutiens_moi');
 
 // Schémas MongoDB
 const messageSchema = new mongoose.Schema({
@@ -68,28 +68,31 @@ const initFakeData = async () => {
 
       // Créer des tuteurs fictifs
       const tutors = [
-        {
-          id: 'tutor_1',
-          name: 'Marie Dupont',
-          email: 'marie@email.com',
-          profilePicture: 'https://via.placeholder.com/150/28A745/FFFFFF?text=M',
-          role: 'tutor'
-        },
-        {
-          id: 'tutor_2',
-          name: 'Jean Martin',
-          email: 'jean@email.com',
-          profilePicture: 'https://via.placeholder.com/150/FFC107/FFFFFF?text=J',
-          role: 'tutor'
-        },
-        {
-          id: 'tutor_3',
-          name: 'Sophie Leblanc',
-          email: 'sophie@email.com',
-          profilePicture: 'https://via.placeholder.com/150/DC3545/FFFFFF?text=S',
-          role: 'tutor'
-        }
-      ];
+  {
+    id: 'tutor_1',
+    name: 'Marie Dupont',
+    email: 'marie@email.com',
+    profilePicture: 'https://i.pravatar.cc/150?img=3',
+    role: 'tutor',
+    isOnline: true
+  },
+  {
+    id: 'tutor_2',
+    name: 'Jean Martin',
+    email: 'jean@email.com',
+    profilePicture: 'https://i.pravatar.cc/150?img=65',
+    role: 'tutor',
+    isOnline: false
+  },
+  {
+    id: 'tutor_3',
+    name: 'Sophie Leblanc',
+    email: 'sophie@email.com',
+    profilePicture: 'https://i.pravatar.cc/150?img=47',
+    role: 'tutor',
+    isOnline: true
+  }
+];
 
       await User.insertMany(tutors);
 
