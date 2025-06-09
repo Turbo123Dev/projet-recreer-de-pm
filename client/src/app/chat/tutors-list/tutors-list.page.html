@@ -1,0 +1,77 @@
+<!-- src/app/chat/tutors-list/tutors-list.page.html -->
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mes Tuteurs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="header-section">
+    <h2>Discuter avec mes tuteurs</h2>
+    <p>Contactez vos tuteurs pour poser vos questions</p>
+  </div>
+
+  <!-- Skeleton loading -->
+  <div *ngIf="isLoading">
+    <ion-card *ngFor="let item of [1,2,3]">
+      <ion-card-content>
+        <div class="tutor-card-skeleton">
+          <ion-avatar>
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+          </ion-avatar>
+          <div class="tutor-info-skeleton">
+            <ion-skeleton-text [animated]="true" style="width: 60%"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
+          </div>
+          <ion-skeleton-text [animated]="true" style="width: 80px; height: 36px"></ion-skeleton-text>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Liste des tuteurs -->
+  <div *ngIf="!isLoading">
+    <ion-card *ngFor="let tutor of tutors" class="tutor-card" button="true">
+      <ion-card-content>
+        <div class="tutor-card-content">
+          <ion-avatar class="tutor-avatar">
+            <img [src]="tutor.profilePicture" [alt]="tutor.name">
+          </ion-avatar>
+          
+          <div class="tutor-info">
+            <h3 class="tutor-name">{{ tutor.name }}</h3>
+            <p class="tutor-subject">
+              <ion-icon name="school-outline"></ion-icon>
+              {{ tutor.subject }}
+            </p>
+            <p class="tutor-status">
+              <span class="status-indicator" [class.online]="tutor.isOnline"></span>
+              {{ tutor.isOnline ? 'En ligne' : 'Hors ligne' }}
+            </p>
+          </div>
+          
+          <ion-button 
+            fill="solid" 
+            color="primary" 
+            size="small"
+            (click)="startChat(tutor)"
+            class="chat-button">
+            <ion-icon name="chatbubble-outline" slot="start"></ion-icon>
+            Discuter
+            <ion-ripple-effect></ion-ripple-effect>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Message si aucun tuteur -->
+    <div *ngIf="tutors.length === 0" class="empty-state">
+      <ion-icon name="person-outline" class="empty-icon"></ion-icon>
+      <h3>Aucun tuteur disponible</h3>
+      <p>Vous n'avez pas encore de contrat actif avec des tuteurs.</p>
+    </div>
+  </div>
+</ion-content>
