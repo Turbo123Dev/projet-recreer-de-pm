@@ -22,5 +22,9 @@ export const routes: Routes = [
     path: 'dashboard', // <-- NOUVEAU : C'est la route de votre tableau de bord
     loadComponent: () => import('./dashboard/dashboard.page').then(m => m.DashboardPage) // <-- IMPORTANT : Mettez le chemin et le nom de la classe de votre composant de tableau de bord
   },
+  {
+    path: 'request-session',
+    loadComponent: () => import('./request-session/request-session.page').then( m => m.RequestSessionPage)
+  },
   // Ajoutez d'autres routes ici si nécessaire
 ];
