@@ -1,0 +1,58 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- Le bouton de retour naviguera vers le tableau de bord -->
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Donner un Feedback</ion-title> <!-- Titre mis à jour -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Donner un Feedback</ion-title> <!-- Titre mis à jour -->
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="feedback-container ion-padding"> <!-- Ajout de padding Ionic standard -->
+    <h2>Votre avis nous intéresse !</h2>
+
+    <div class="star-rating ion-text-center ion-margin-bottom">
+      <ion-icon
+        *ngFor="let star of [1, 2, 3, 4, 5]"
+        [name]="rating >= star ? 'star' : 'star-outline'"
+        [class.selected]="rating >= star"
+        (click)="setRating(star)"
+      ></ion-icon>
+    </div>
+
+    <ion-item class="ion-margin-bottom">
+      <ion-textarea
+        label="Commentaire"
+        labelPlacement="floating"
+        placeholder="Écrivez votre commentaire ici..."
+        rows="5"
+        [(ngModel)]="comment"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-button expand="block" (click)="submitFeedback()">Envoyer le Feedback</ion-button>
+
+    <ion-list *ngIf="oldFeedbacks && oldFeedbacks.length > 0" class="ion-margin-top">
+        <ion-list-header>
+            <ion-label>Anciens Feedbacks</ion-label>
+        </ion-list-header>
+
+        <ion-item *ngFor="let feedback of oldFeedbacks">
+            <ion-label>
+                <h3>Notation: {{ feedback.rating }} / 5</h3>
+                <p>{{ feedback.comment }}</p>
+                <p><small>De: {{ feedback.userName }} - Le: {{ feedback.date | date:'short' }}</small></p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+    <p *ngIf="!oldFeedbacks || oldFeedbacks.length === 0" class="no-feedback-message ion-text-center ion-padding">Aucun feedback trouvé pour le moment.</p>
+
+  </div>
+</ion-content>

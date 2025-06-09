@@ -26,7 +26,9 @@ import {
   searchOutline,
   calendarOutline,
   chatbubblesOutline,
-  helpCircleOutline,
+  // Ajout des icônes pour les étoiles du feedback si elles ne sont pas déjà ajoutées globalement
+  star, starOutline,
+  helpCircleOutline, // Garde cette icône pour la FAQ si tu ne la remplaces pas entièrement
   chevronForwardOutline,
   timeOutline,
   personOutline,
@@ -35,7 +37,7 @@ import {
 } from 'ionicons/icons';
 
 @Component({
-  selector: 'app-dashboard', // Le sélecteur doit être app-dashboard si c'est ta route
+  selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
@@ -68,12 +70,14 @@ export class DashboardPage implements OnInit {
       searchOutline,
       calendarOutline,
       chatbubblesOutline,
-      helpCircleOutline,
+      helpCircleOutline, // Icône pour FAQ
       chevronForwardOutline,
       timeOutline,
       personOutline,
       addOutline,
-      statsChartOutline
+      statsChartOutline,
+      star, // Ajout de l'icône étoile pleine
+      starOutline // Ajout de l'icône étoile vide
     });
   }
 
@@ -95,7 +99,7 @@ export class DashboardPage implements OnInit {
       this.userStats = await firstValueFrom(this.authService.getUserStats());
       console.log('Statistiques utilisateur chargées:', this.userStats);
 
-    } catch (error: any) { // Typage de l'erreur pour éviter ts(7006)
+    } catch (error: any) {
       console.error('Erreur lors du chargement des données du tableau de bord:', error);
       if (error instanceof HttpErrorResponse) {
         if (error.status === 401) {
@@ -126,9 +130,10 @@ export class DashboardPage implements OnInit {
     console.log('Naviguer vers le chat');
   }
 
+  // MODIFIÉ : goToFAQ mènera maintenant à la page de feedback
   goToFAQ() {
-    this.navCtrl.navigateForward('/faq');
-    console.log('Naviguer vers la FAQ');
+    this.navCtrl.navigateForward('/feedback'); // Navigue vers la page de feedback
+    console.log('Naviguer vers le feedback (anciennement FAQ)');
   }
 
   viewAllSessions() {

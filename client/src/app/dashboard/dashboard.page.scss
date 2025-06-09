@@ -1,30 +1,33 @@
 /* src/app/dashboard/dashboard.page.scss */
 
 // Variables pour un thème clair/doux (inspiré de la maquette)
-// Vous pouvez les adapter à votre thème Ionic global si nécessaire.
 :root {
-  --ion-color-primary: #5260ff; // Couleur primaire Ionic (bleu par défaut)
+  // Couleurs principales Ionic (vous pouvez les adapter)
+  --ion-color-primary: #5260ff;
   --ion-color-primary-rgb: 82, 96, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #4854e0;
   --ion-color-primary-tint: #6370ff;
-  --ion-color-secondary: #50c8ff; // Couleur secondaire Ionic (bleu clair par défaut)
+
+  --ion-color-secondary: #50c8ff;
   --ion-color-secondary-rgb: 80, 200, 255;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
   --ion-color-secondary-shade: #46b0e0;
   --ion-color-secondary-tint: #62ceff;
+
   --ion-color-tertiary: #5260ff; // Utilisons la même que primary pour la consistance visuelle de la maquette
   --ion-color-tertiary-rgb: 82, 96, 255;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
   --ion-color-tertiary-shade: #4854e0;
   --ion-color-tertiary-tint: #6370ff;
+
   --ion-color-success: #2dd36f; // Vert pour le succès/présentiel
   --ion-color-warning: #ffc409; // Jaune pour l'avertissement
   --ion-color-danger: #eb445a; // Rouge pour le danger
-  --ion-color-light: #f4f5f8; // Gris très clair (gardé au cas où vous en auriez besoin ailleurs)
+  --ion-color-light: #f4f5f8; // Couleur de fond générale claire (mais le dashboard le surcharge en blanc)
   --ion-color-medium: #92949c; // Gris moyen
   --ion-color-dark: #222428; // Texte sombre
 
@@ -34,34 +37,44 @@
   --text-color-dark: var(--ion-color-dark);
   --text-color-medium: var(--ion-color-medium);
   --border-color: #e0e0e0; // Couleur des bordures subtiles
+
+  // GLOBAL: Assure que la couleur de fond Ionic par défaut est blanche
+  --ion-background-color: #ffffff;
+}
+
+// Assure que le corps du document utilise un fond blanc
+body {
+    --ion-background-color: #ffffff; /* FORCE LE FOND DU BODY EN BLANC */
+    background: #ffffff; /* Ajouté pour une compatibilité maximale */
+    color: var(--text-color-dark);
 }
 
 // Styles généraux pour le contenu du dashboard
 .dashboard-content {
-  --background: var(--dashboard-bg-color); // Applique le fond défini
+  --background: var(--dashboard-bg-color); // Applique le fond défini (qui est blanc)
   padding: 16px; // Espacement intérieur général
-  width: 100%; /* S'assure que le contenu prend toute la largeur disponible */
-  box-sizing: border-box; /* Inclut le padding dans la largeur totale */
+  width: 100%;
+  box-sizing: border-box;
 
   // Sections
   .welcome-section,
   .quick-actions-section,
   .upcoming-sessions-section,
   .stats-section {
-      margin-bottom: 24px; // Espacement entre les sections
+    margin-bottom: 24px; // Espacement entre les sections
   }
   .section-title {
-      display: flex;
-      align-items: center;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: var(--text-color-dark);
-      margin-bottom: 15px;
-      ion-icon {
-          margin-inline-end: 8px; // Espace entre l'icône et le texte
-          color: var(--ion-color-primary); // Couleur de l'icône
-          font-size: 1.4em;
-      }
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--text-color-dark);
+    margin-bottom: 15px;
+    ion-icon {
+      margin-inline-end: 8px; // Espace entre l'icône et le texte
+      color: var(--ion-color-primary); // Couleur de l'icône
+      font-size: 1.4em;
+    }
   }
 }
 
@@ -77,8 +90,8 @@ ion-toolbar {
   font-size: 1.2em; // Taille du texte dans le header
   font-weight: bold;
   ion-icon {
-      margin-inline-end: 8px;
-      font-size: 1.5em; // Taille de l'icône dans le header
+    margin-inline-end: 8px;
+    font-size: 1.5em; // Taille de l'icône dans le header
   }
 }
 
@@ -88,39 +101,39 @@ ion-toolbar {
   margin-top: 20px;
   margin-bottom: 30px; // Plus d'espace après la section de bienvenue
   .welcome-card {
-      background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-tertiary));
-      color: var(--ion-color-primary-contrast);
-      padding: 25px 20px;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(var(--ion-color-primary-rgb), 0.2); // Ombre plus douce
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      .welcome-icon {
-          font-size: 3em; // Grande icône emoji
-          margin-bottom: 10px;
-      }
-      h1 {
-          font-size: 1.8em;
-          margin: 5px 0;
-          color: var(--ion-color-primary-contrast); // S'assurer que le texte est blanc
-      }
-      h2 {
-          font-size: 1.2em;
-          margin: 0 0 10px;
-          color: rgba(var(--ion-color-primary-contrast-rgb), 0.9); // Légèrement transparent
-          font-weight: normal;
-      }
-      .app-name {
-          font-weight: bold;
-      }
-      .welcome-question {
-          font-size: 0.9em;
-          opacity: 0.8;
-          margin-top: 15px;
-      }
+    background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-tertiary));
+    color: var(--ion-color-primary-contrast);
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(var(--ion-color-primary-rgb), 0.2); // Ombre plus douce
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    .welcome-icon {
+      font-size: 3em; // Grande icône emoji
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 1.8em;
+      margin: 5px 0;
+      color: var(--ion-color-primary-contrast); // S'assurer que le texte est blanc
+    }
+    h2 {
+      font-size: 1.2em;
+      margin: 0 0 10px;
+      color: rgba(var(--ion-color-primary-contrast-rgb), 0.9); // Légèrement transparent
+      font-weight: normal;
+    }
+    .app-name {
+      font-weight: bold;
+    }
+    .welcome-question {
+      font-size: 0.9em;
+      opacity: 0.8;
+      margin-top: 15px;
+    }
   }
 }
 
@@ -130,205 +143,206 @@ ion-toolbar {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); // Colonnes responsives
   gap: 15px; // Espacement entre les cartes
   .action-card {
-      background: var(--card-bg-color);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); // Ombre légère
+    background: var(--card-bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); // Ombre légère
+    display: flex;
+    align-items: center; // Aligner icône et texte
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid var(--border-color); // Bordure subtile
+    &:hover {
+      transform: translateY(-3px); // Effet de survol
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+    .action-icon {
+      flex-shrink: 0; // Empêche l'icône de rétrécir
+      width: 45px;
+      height: 45px;
+      border-radius: 50%; // Cercle pour l'icône
       display: flex;
-      align-items: center; // Aligner icône et texte
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-      border: 1px solid var(--border-color); // Bordure subtile
-      &:hover {
-          transform: translateY(-3px); // Effet de survol
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      justify-content: center;
+      align-items: center;
+      margin-inline-end: 15px; // Espace entre l'icône et le contenu
+      font-size: 1.8em; // Taille des icônes
+      color: #ffffff; // Icône blanche
+      &.search-icon {
+        background: var(--ion-color-primary);
       }
-      .action-icon {
-          flex-shrink: 0; // Empêche l'icône de rétrécir
-          width: 45px;
-          height: 45px;
-          border-radius: 50%; // Cercle pour l'icône
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-inline-end: 15px; // Espace entre l'icône et le contenu
-          font-size: 1.8em; // Taille des icônes
-          color: #ffffff; // Icône blanche
-          &.search-icon {
-              background: var(--ion-color-primary);
-          }
-          &.planning-icon {
-              background: var(--ion-color-secondary);
-          }
-          &.chat-icon {
-              background: var(--ion-color-tertiary);
-          } // Utilise tertiary pour un look distinct
-          &.faq-icon {
-              background: var(--ion-color-warning);
-          } // Une couleur différente pour FAQ
-          ion-icon {
-              --ionicon-color: #ffffff; // Assure la couleur de l'icône à l'intérieur du cercle
-          }
+      &.planning-icon {
+        background: var(--ion-color-secondary);
       }
-      .action-content {
-          flex-grow: 1; // Permet au contenu de prendre l'espace disponible
-          h4 {
-              font-size: 1.1em;
-              font-weight: bold;
-              color: var(--text-color-dark);
-              margin: 0 0 4px;
-          }
-          p {
-              font-size: 0.85em;
-              color: var(--text-color-medium);
-              margin: 0;
-          }
+      &.chat-icon {
+        background: var(--ion-color-tertiary);
       }
-      .action-arrow {
-          flex-shrink: 0;
-          font-size: 1.3em;
-          color: var(--ion-color-medium);
-          margin-inline-start: 10px; // Espace avant la flèche
+      &.faq-icon {
+        background: var(--ion-color-warning);
       }
+      ion-icon {
+        --ionicon-color: #ffffff; // Assure la couleur de l'icône à l'intérieur du cercle
+      }
+    }
+    .action-content {
+      flex-grow: 1; // Permet au contenu de prendre l'espace disponible
+      h4 {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: var(--text-color-dark);
+        margin: 0 0 4px;
+      }
+      p {
+        font-size: 0.85em;
+        color: var(--text-color-medium);
+        margin: 0;
+      }
+    }
+    .action-arrow {
+      flex-shrink: 0;
+      font-size: 1.3em;
+      color: var(--ion-color-medium);
+      margin-inline-start: 10px; // Espace avant la flèche
+    }
   }
 }
 
 // --- Section Prochaines séances ---
 .upcoming-sessions-section {
   .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      ion-button {
-          --padding-start: 8px;
-          --padding-end: 8px;
-          font-size: 0.8em;
-          text-transform: capitalize; // Pas de majuscules automatiques
-      }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      font-size: 0.8em;
+      text-transform: capitalize; // Pas de majuscules automatiques
+    }
   }
   .sessions-list {
-      display: grid;
-      gap: 15px; // Espacement entre les séances
+    display: grid;
+    gap: 15px; // Espacement entre les séances
   }
   .session-card {
-      background: var(--card-bg-color);
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--border-color);
-      .session-date {
-          flex-shrink: 0;
-          text-align: center;
-          margin-inline-end: 15px;
-          padding-inline-end: 15px;
-          border-inline-end: 1px solid var(--border-color); // Séparateur vertical
-          .day {
-              font-size: 1.8em;
-              font-weight: bold;
-              color: var(--ion-color-primary);
-              line-height: 1;
-          }
-          .month {
-              font-size: 0.8em;
-              text-transform: uppercase;
-              color: var(--text-color-medium);
-          }
-      }
-      .session-info {
-          flex-grow: 1;
-          h4 {
-              font-size: 1.1em;
-              font-weight: bold;
-              color: var(--text-color-dark);
-              margin: 0 0 5px;
-          }
-          p {
-              display: flex;
-              align-items: center;
-              font-size: 0.9em;
-              color: var(--text-color-medium);
-              margin: 0 0 3px;
-              ion-icon {
-                  margin-inline-end: 5px;
-                  font-size: 1em;
-                  color: var(--ion-color-medium);
-              }
-          }
-      }
-      .session-mode {
-          flex-shrink: 0;
-          margin-inline-start: 15px;
-          ion-badge {
-              font-size: 0.8em;
-              padding: 6px 10px;
-              border-radius: 5px;
-              text-transform: capitalize;
-          }
-      }
-  }
-  .no-sessions {
+    background: var(--card-bg-color);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    .session-date {
+      flex-shrink: 0;
       text-align: center;
-      padding: 30px 20px;
-      background: var(--card-bg-color);
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-      border: 1px solid var(--border-color);
-      .no-sessions-icon {
-          font-size: 3em;
-          margin-bottom: 15px;
+      margin-inline-end: 15px;
+      padding-inline-end: 15px;
+      border-inline-end: 1px solid var(--border-color); // Séparateur vertical
+      .day {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: var(--ion-color-primary);
+        line-height: 1;
       }
+      .month {
+        font-size: 0.8em;
+        text-transform: uppercase;
+        color: var(--text-color-medium);
+      }
+    }
+    .session-info {
+      flex-grow: 1;
       h4 {
-          font-size: 1.3em;
-          color: var(--text-color-dark);
-          margin: 0 0 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: var(--text-color-dark);
+        margin: 0 0 5px;
       }
       p {
-          font-size: 0.9em;
-          color: var(--text-color-medium);
-          margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        font-size: 0.9em;
+        color: var(--text-color-medium);
+        margin: 0 0 3px;
+        ion-icon {
+          margin-inline-end: 5px;
+          font-size: 1em;
+          color: var(--ion-color-medium);
+        }
       }
+    }
+    .session-mode {
+      flex-shrink: 0;
+      margin-inline-start: 15px;
+      ion-badge {
+        font-size: 0.8em;
+        padding: 6px 10px;
+        border-radius: 5px;
+        text-transform: capitalize;
+      }
+    }
+  }
+  .no-sessions {
+    text-align: center;
+    padding: 30px 20px;
+    background: var(--card-bg-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    .no-sessions-icon {
+      font-size: 3em;
+      margin-bottom: 15px;
+    }
+    h4 {
+      font-size: 1.3em;
+      color: var(--text-color-dark);
+      margin: 0 0 10px;
+    }
+    p {
+      font-size: 0.9em;
+      color: var(--text-color-medium);
+      margin-bottom: 20px;
+    }
   }
 }
 
 // --- Section Statistiques ---
 .stats-section {
   .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); // 3 colonnes responsives
-      gap: 15px;
-      .stat-item {
-          background: var(--card-bg-color);
-          padding: 20px 15px;
-          border-radius: 10px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-          text-align: center;
-          border: 1px solid var(--border-color);
-          .stat-number {
-              font-size: 1.8em;
-              font-weight: bold;
-              color: var(--ion-color-primary);
-              margin-bottom: 5px;
-          }
-          .stat-label {
-              font-size: 0.85em;
-              color: var(--text-color-medium);
-          }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); // 3 colonnes responsives
+    gap: 15px;
+    .stat-item {
+      background: var(--card-bg-color);
+      padding: 20px 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      border: 1px solid var(--border-color);
+      .stat-number {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: var(--ion-color-primary);
+        margin-bottom: 5px;
       }
+      .stat-label {
+        font-size: 0.85em;
+        color: var(--text-color-medium);
+      }
+    }
   }
 }
 
-// --- Footer / Barre de navigation inférieure ---
+// --- Footer / Barre de navigation inférieure (si utilisée) ---
+// Supposons que vous avez une barre de navigation (ion-tab-bar) ici,
+// sinon, vous pouvez retirer cette section
 ion-footer {
-  // Fixe le footer en bas et le rend toujours visible
   position: sticky;
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; // S'assure qu'il est au-dessus du contenu
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08); // Ombre légère vers le haut
+  z-index: 1000;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
 }
 
 ion-tab-bar {
@@ -336,35 +350,25 @@ ion-tab-bar {
   --border: none; // Enlève la bordure par défaut
   padding-bottom: env(safe-area-inset-bottom); // Gère la zone de sécurité sur iOS/Android
   ion-tab-button {
-      --color: var(--ion-color-medium); // Couleur des icônes/labels inactifs
-      --color-selected: var(--ion-color-primary); // Couleur des icônes/labels actifs
-      // Style pour l'icône et le texte quand le bouton est sélectionné
-      &.tab-selected {
-          ion-icon {
-              transform: translateY(-2px); // Petit effet de soulèvement
-          }
-          ion-label {
-              font-weight: bold;
-          }
+    --color: var(--ion-color-medium); // Couleur des icônes/labels inactifs
+    --color-selected: var(--ion-color-primary); // Couleur des icônes/labels actifs
+    &.tab-selected {
+      ion-icon {
+        transform: translateY(-2px);
       }
+      ion-label {
+        font-weight: bold;
+      }
+    }
   }
 }
 
 // Media queries pour l'adaptation responsive
 @media (min-width: 768px) {
-  /*
-  // J'ai commenté ces lignes pour que le contenu prenne toute la largeur.
-  // Si vous souhaitez une largeur maximale sur les grands écrans,
-  // décommentez ces lignes et ajustez le max-width si nécessaire.
-  .dashboard-content {
-      max-width: 900px; // Limite la largeur sur de grands écrans
-      margin: 0 auto; // Centre le contenu
-  }
-  */
   .actions-grid {
-      grid-template-columns: repeat(4, 1fr); // 4 colonnes sur les grands écrans
+    grid-template-columns: repeat(4, 1fr); // 4 colonnes sur les grands écrans
   }
   .stats-grid {
-      grid-template-columns: repeat(3, 1fr); // 3 colonnes sur les grands écrans (déjà comme ça)
+    grid-template-columns: repeat(3, 1fr); // 3 colonnes sur les grands écrans (déjà comme ça)
   }
 }

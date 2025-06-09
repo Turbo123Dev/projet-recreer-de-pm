@@ -26,14 +26,19 @@ export const routes: Routes = [
     path: 'request-session',
     loadComponent: () => import('./request-session/request-session.page').then( m => m.RequestSessionPage)
   },
-  // NOUVELLES ROUTES POUR LE CHAT
+  // Routes existantes pour le chat
   {
-    path: 'chat', // Route pour un chat général (sans ID de tuteur spécifique)
+    path: 'chat',
     loadComponent: () => import('./chat/chat.page').then(m => m.ChatPage)
   },
   {
-    path: 'chat/:tutorId', // Route pour un chat spécifique avec un tuteur (ID passé en paramètre)
+    path: 'chat/:tutorId',
     loadComponent: () => import('./chat/chat.page').then(m => m.ChatPage)
+  },
+  // NOUVELLE ROUTE POUR LE FEEDBACK
+  {
+    path: 'feedback', // Route pour la page de feedback
+    loadComponent: () => import('./feedback/feedback.page').then(m => m.FeedbackPage)
   },
   // Ajoutez d'autres routes ici si nécessaire
 ];
