@@ -35,53 +35,9 @@
   --border-color: #e0e0e0; // Couleur des bordures subtiles
 }
 
-/* Forcer le mode clair spécifiquement pour cette page/ce composant */
-:host {
-  ion-content {
-    --background: var(--dashboard-bg-color, #f4f5f8); /* Utilise la variable ou une couleur de repli */
-    --color: var(--text-color-dark, #222428); /* Définit la couleur du texte par défaut pour le contenu */
-  }
-
-  // S'assurer que les barres d'outils et autres éléments Ionic respectent le thème clair
-  ion-toolbar {
-    --background: var(--ion-color-primary);
-    --color: var(--ion-color-primary-contrast);
-  }
-
-  ion-header {
-    --background: var(--ion-color-primary); // Assurez-vous que le header a aussi la bonne couleur de fond
-    --color: var(--ion-color-primary-contrast); // Couleur du texte du header
-  }
-
-  // Appliquer des couleurs de texte explicites aux éléments qui pourraient hériter des couleurs du mode sombre
-  h1, h2, h3, h4, h5, h6, p, span, div {
-      color: var(--text-color-dark);
-  }
-  // Corriger les couleurs de texte spécifiques si nécessaire, par exemple dans les cartes
-  .welcome-card h1, .welcome-card h2, .welcome-card .welcome-question {
-      color: var(--ion-color-primary-contrast); // Texte blanc sur le dégradé bleu
-  }
-  .action-content h4 {
-      color: var(--text-color-dark);
-  }
-  .action-content p {
-      color: var(--text-color-medium);
-  }
-  .session-info h4 {
-      color: var(--text-color-dark);
-  }
-  .session-info p {
-      color: var(--text-color-medium);
-  }
-  .stat-item .stat-label {
-      color: var(--text-color-medium);
-  }
-}
-
-
 // Styles généraux pour le contenu du dashboard
 .dashboard-content {
-  /* Le --background et --color sont maintenant gérés par :host ion-content */
+  --background: var(--dashboard-bg-color); // Applique le fond défini
   padding: 16px; // Espacement intérieur général
   width: 100%; /* S'assure que le contenu prend toute la largeur disponible */
   box-sizing: border-box; /* Inclut le padding dans la largeur totale */
@@ -91,20 +47,20 @@
   .quick-actions-section,
   .upcoming-sessions-section,
   .stats-section {
-    margin-bottom: 24px; // Espacement entre les sections
+      margin-bottom: 24px; // Espacement entre les sections
   }
   .section-title {
-    display: flex;
-    align-items: center;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: var(--text-color-dark); // Force la couleur du titre de section
-    margin-bottom: 15px;
-    ion-icon {
-      margin-inline-end: 8px; // Espace entre l'icône et le texte
-      color: var(--ion-color-primary); // Couleur de l'icône
-      font-size: 1.4em;
-    }
+      display: flex;
+      align-items: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: var(--text-color-dark);
+      margin-bottom: 15px;
+      ion-icon {
+          margin-inline-end: 8px; // Espace entre l'icône et le texte
+          color: var(--ion-color-primary); // Couleur de l'icône
+          font-size: 1.4em;
+      }
   }
 }
 
@@ -120,8 +76,8 @@ ion-toolbar {
   font-size: 1.2em; // Taille du texte dans le header
   font-weight: bold;
   ion-icon {
-    margin-inline-end: 8px;
-    font-size: 1.5em; // Taille de l'icône dans le header
+      margin-inline-end: 8px;
+      font-size: 1.5em; // Taille de l'icône dans le header
   }
 }
 
@@ -131,40 +87,39 @@ ion-toolbar {
   margin-top: 20px;
   margin-bottom: 30px; // Plus d'espace après la section de bienvenue
   .welcome-card {
-    background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-tertiary));
-    color: var(--ion-color-primary-contrast);
-    padding: 25px 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(var(--ion-color-primary-rgb), 0.2); // Ombre plus douce
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    .welcome-icon {
-      font-size: 3em; // Grande icône emoji
-      margin-bottom: 10px;
-    }
-    h1 {
-      font-size: 1.8em;
-      margin: 5px 0;
-      color: var(--ion-color-primary-contrast); // S'assurer que le texte est blanc
-    }
-    h2 {
-      font-size: 1.2em;
-      margin: 0 0 10px;
-      color: rgba(var(--ion-color-primary-contrast-rgb), 0.9); // Légèrement transparent
-      font-weight: normal;
-    }
-    .app-name {
-      font-weight: bold;
-    }
-    .welcome-question {
-      font-size: 0.9em;
-      opacity: 0.8;
-      margin-top: 15px;
-      color: var(--ion-color-primary-contrast); // Assurer que la question est également claire
-    }
+      background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-tertiary));
+      color: var(--ion-color-primary-contrast);
+      padding: 25px 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(var(--ion-color-primary-rgb), 0.2); // Ombre plus douce
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      .welcome-icon {
+          font-size: 3em; // Grande icône emoji
+          margin-bottom: 10px;
+      }
+      h1 {
+          font-size: 1.8em;
+          margin: 5px 0;
+          color: var(--ion-color-primary-contrast); // S'assurer que le texte est blanc
+      }
+      h2 {
+          font-size: 1.2em;
+          margin: 0 0 10px;
+          color: rgba(var(--ion-color-primary-contrast-rgb), 0.9); // Légèrement transparent
+          font-weight: normal;
+      }
+      .app-name {
+          font-weight: bold;
+      }
+      .welcome-question {
+          font-size: 0.9em;
+          opacity: 0.8;
+          margin-top: 15px;
+      }
   }
 }
 
@@ -174,236 +129,241 @@ ion-toolbar {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); // Colonnes responsives
   gap: 15px; // Espacement entre les cartes
   .action-card {
-    background: var(--card-bg-color); // Fond blanc pour les cartes
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); // Ombre légère
-    display: flex;
-    align-items: center; // Aligner icône et texte
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    border: 1px solid var(--border-color); // Bordure subtile
-    &:hover {
-      transform: translateY(-3px); // Effet de survol
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    }
-    .action-icon {
-      flex-shrink: 0; // Empêche l'icône de rétrécir
-      width: 45px;
-      height: 45px;
-      border-radius: 50%; // Cercle pour l'icône
+      background: var(--card-bg-color);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); // Ombre légère
       display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-inline-end: 15px; // Espace entre l'icône et le contenu
-      font-size: 1.8em; // Taille des icônes
-      color: #ffffff; // Icône blanche
-      &.search-icon {
-        background: var(--ion-color-primary);
+      align-items: center; // Aligner icône et texte
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      border: 1px solid var(--border-color); // Bordure subtile
+      &:hover {
+          transform: translateY(-3px); // Effet de survol
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
       }
-      &.planning-icon {
-        background: var(--ion-color-secondary);
+      .action-icon {
+          flex-shrink: 0; // Empêche l'icône de rétrécir
+          width: 45px;
+          height: 45px;
+          border-radius: 50%; // Cercle pour l'icône
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-inline-end: 15px; // Espace entre l'icône et le contenu
+          font-size: 1.8em; // Taille des icônes
+          color: #ffffff; // Icône blanche
+          &.search-icon {
+              background: var(--ion-color-primary);
+          }
+          &.planning-icon {
+              background: var(--ion-color-secondary);
+          }
+          &.chat-icon {
+              background: var(--ion-color-tertiary);
+          } // Utilise tertiary pour un look distinct
+          &.faq-icon {
+              background: var(--ion-color-warning);
+          } // Une couleur différente pour FAQ
+          ion-icon {
+              --ionicon-color: #ffffff; // Assure la couleur de l'icône à l'intérieur du cercle
+          }
       }
-      &.chat-icon {
-        background: var(--ion-color-tertiary);
-      } // Utilise tertiary pour un look distinct
-      &.faq-icon {
-        background: var(--ion-color-warning);
-      } // Une couleur différente pour FAQ
-      ion-icon {
-        --ionicon-color: #ffffff; // Assure la couleur de l'icône à l'intérieur du cercle
+      .action-content {
+          flex-grow: 1; // Permet au contenu de prendre l'espace disponible
+          h4 {
+              font-size: 1.1em;
+              font-weight: bold;
+              color: var(--text-color-dark);
+              margin: 0 0 4px;
+          }
+          p {
+              font-size: 0.85em;
+              color: var(--text-color-medium);
+              margin: 0;
+          }
       }
-    }
-    .action-content {
-      flex-grow: 1; // Permet au contenu de prendre l'espace disponible
-      h4 {
-        font-size: 1.1em;
-        font-weight: bold;
-        color: var(--text-color-dark); // Force la couleur du titre
-        margin: 0 0 4px;
+      .action-arrow {
+          flex-shrink: 0;
+          font-size: 1.3em;
+          color: var(--ion-color-medium);
+          margin-inline-start: 10px; // Espace avant la flèche
       }
-      p {
-        font-size: 0.85em;
-        color: var(--text-color-medium); // Force la couleur du paragraphe
-        margin: 0;
-      }
-    }
-    .action-arrow {
-      flex-shrink: 0;
-      font-size: 1.3em;
-      color: var(--ion-color-medium);
-      margin-inline-start: 10px; // Espace avant la flèche
-    }
   }
 }
 
 // --- Section Prochaines séances ---
 .upcoming-sessions-section {
   .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    ion-button {
-      --padding-start: 8px;
-      --padding-end: 8px;
-      font-size: 0.8em;
-      text-transform: capitalize; // Pas de majuscules automatiques
-    }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      ion-button {
+          --padding-start: 8px;
+          --padding-end: 8px;
+          font-size: 0.8em;
+          text-transform: capitalize; // Pas de majuscules automatiques
+      }
   }
   .sessions-list {
-    display: grid;
-    gap: 15px; // Espacement entre les séances
+      display: grid;
+      gap: 15px; // Espacement entre les séances
   }
   .session-card {
-    background: var(--card-bg-color); // Fond blanc pour les cartes
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--border-color);
-    .session-date {
-      flex-shrink: 0;
-      text-align: center;
-      margin-inline-end: 15px;
-      padding-inline-end: 15px;
-      border-inline-end: 1px solid var(--border-color); // Séparateur vertical
-      .day {
-        font-size: 1.8em;
-        font-weight: bold;
-        color: var(--ion-color-primary);
-        line-height: 1;
+      background: var(--card-bg-color);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      .session-date {
+          flex-shrink: 0;
+          text-align: center;
+          margin-inline-end: 15px;
+          padding-inline-end: 15px;
+          border-inline-end: 1px solid var(--border-color); // Séparateur vertical
+          .day {
+              font-size: 1.8em;
+              font-weight: bold;
+              color: var(--ion-color-primary);
+              line-height: 1;
+          }
+          .month {
+              font-size: 0.8em;
+              text-transform: uppercase;
+              color: var(--text-color-medium);
+          }
       }
-      .month {
-        font-size: 0.8em;
-        text-transform: uppercase;
-        color: var(--text-color-medium);
+      .session-info {
+          flex-grow: 1;
+          h4 {
+              font-size: 1.1em;
+              font-weight: bold;
+              color: var(--text-color-dark);
+              margin: 0 0 5px;
+          }
+          p {
+              display: flex;
+              align-items: center;
+              font-size: 0.9em;
+              color: var(--text-color-medium);
+              margin: 0 0 3px;
+              ion-icon {
+                  margin-inline-end: 5px;
+                  font-size: 1em;
+                  color: var(--ion-color-medium);
+              }
+          }
       }
-    }
-    .session-info {
-      flex-grow: 1;
-      h4 {
-        font-size: 1.1em;
-        font-weight: bold;
-        color: var(--text-color-dark); // Force la couleur du titre
-        margin: 0 0 5px;
+      .session-mode {
+          flex-shrink: 0;
+          margin-inline-start: 15px;
+          ion-badge {
+              font-size: 0.8em;
+              padding: 6px 10px;
+              border-radius: 5px;
+              text-transform: capitalize;
+          }
       }
-      p {
-        display: flex;
-        align-items: center;
-        font-size: 0.9em;
-        color: var(--text-color-medium); // Force la couleur du paragraphe
-        margin: 0 0 3px;
-        ion-icon {
-          margin-inline-end: 5px;
-          font-size: 1em;
-          color: var(--ion-color-medium);
-        }
-      }
-    }
-    .session-mode {
-      flex-shrink: 0;
-      margin-inline-start: 15px;
-      ion-badge {
-        font-size: 0.8em;
-        padding: 6px 10px;
-        border-radius: 5px;
-        text-transform: capitalize;
-      }
-    }
   }
   .no-sessions {
-    text-align: center;
-    padding: 30px 20px;
-    background: var(--card-bg-color); // Fond blanc
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
-    .no-sessions-icon {
-      font-size: 3em;
-      margin-bottom: 15px;
-    }
-    h4 {
-      font-size: 1.3em;
-      color: var(--text-color-dark); // Force la couleur du titre
-      margin: 0 0 10px;
-    }
-    p {
-      font-size: 0.9em;
-      color: var(--text-color-medium); // Force la couleur du paragraphe
-      margin-bottom: 20px;
-    }
+      text-align: center;
+      padding: 30px 20px;
+      background: var(--card-bg-color);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+      .no-sessions-icon {
+          font-size: 3em;
+          margin-bottom: 15px;
+      }
+      h4 {
+          font-size: 1.3em;
+          color: var(--text-color-dark);
+          margin: 0 0 10px;
+      }
+      p {
+          font-size: 0.9em;
+          color: var(--text-color-medium);
+          margin-bottom: 20px;
+      }
   }
 }
 
 // --- Section Statistiques ---
 .stats-section {
   .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); // 3 colonnes responsives
-    gap: 15px;
-    .stat-item {
-      background: var(--card-bg-color); // Fond blanc
-      padding: 20px 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-      text-align: center;
-      border: 1px solid var(--border-color);
-      .stat-number {
-        font-size: 1.8em;
-        font-weight: bold;
-        color: var(--ion-color-primary);
-        margin-bottom: 5px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); // 3 colonnes responsives
+      gap: 15px;
+      .stat-item {
+          background: var(--card-bg-color);
+          padding: 20px 15px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+          text-align: center;
+          border: 1px solid var(--border-color);
+          .stat-number {
+              font-size: 1.8em;
+              font-weight: bold;
+              color: var(--ion-color-primary);
+              margin-bottom: 5px;
+          }
+          .stat-label {
+              font-size: 0.85em;
+              color: var(--text-color-medium);
+          }
       }
-      .stat-label {
-        font-size: 0.85em;
-        color: var(--text-color-medium); // Force la couleur du label
-      }
-    }
   }
 }
 
 // --- Footer / Barre de navigation inférieure ---
 ion-footer {
+  // Fixe le footer en bas et le rend toujours visible
   position: sticky;
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 1000; // S'assure qu'il est au-dessus du contenu
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08); // Ombre légère vers le haut
 }
 
 ion-tab-bar {
   --background: var(--card-bg-color); // Fond blanc pour la barre
-  --border: none;
-  padding-bottom: env(safe-area-inset-bottom);
+  --border: none; // Enlève la bordure par défaut
+  padding-bottom: env(safe-area-inset-bottom); // Gère la zone de sécurité sur iOS/Android
   ion-tab-button {
-    --color: var(--ion-color-medium);
-    --color-selected: var(--ion-color-primary);
-    &.tab-selected {
-      ion-icon {
-        transform: translateY(-2px);
+      --color: var(--ion-color-medium); // Couleur des icônes/labels inactifs
+      --color-selected: var(--ion-color-primary); // Couleur des icônes/labels actifs
+      // Style pour l'icône et le texte quand le bouton est sélectionné
+      &.tab-selected {
+          ion-icon {
+              transform: translateY(-2px); // Petit effet de soulèvement
+          }
+          ion-label {
+              font-weight: bold;
+          }
       }
-      ion-label {
-        font-weight: bold;
-      }
-    }
   }
 }
 
 // Media queries pour l'adaptation responsive
 @media (min-width: 768px) {
   /*
+  // J'ai commenté ces lignes pour que le contenu prenne toute la largeur.
+  // Si vous souhaitez une largeur maximale sur les grands écrans,
+  // décommentez ces lignes et ajustez le max-width si nécessaire.
   .dashboard-content {
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 900px; // Limite la largeur sur de grands écrans
+      margin: 0 auto; // Centre le contenu
   }
   */
   .actions-grid {
-    grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr); // 4 colonnes sur les grands écrans
   }
   .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr); // 3 colonnes sur les grands écrans (déjà comme ça)
   }
 }
