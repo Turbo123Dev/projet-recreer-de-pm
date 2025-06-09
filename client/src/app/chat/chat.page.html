@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Discussion {{ targetRecipientId === 'general_chat' ? 'Général' : 'avec ' + targetRecipientId }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="chat-background">
+  <div class="chat-messages" #messagesContainer>
+    <ng-container *ngIf="messages.length === 0">
+      <div class="no-messages">
+        <p>Aucun message pour le moment.</p>
+        <ion-button expand="block" (click)="startChat()">Commencer le chat</ion-button>
+      </div>
+    </ng-container>
+
+    <div *ngFor="let message of messages"
+         class="chat-bubble"
+         [ngClass]="{'my-message': message.sender === currentSenderId, 'their-message': message.sender !== currentSenderId}">
+      <span class="sender-name" *ngIf="message.sender !== currentSenderId">{{ message.sender }}: </span>
+      {{ message.text }}
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="chat-input">
+    <ion-input
+      [(ngModel)]="newMessage"
+      placeholder="Écrire un message..."
+      (keyup.enter)="sendMessage()"
+    ></ion-input>
+    <ion-button (click)="sendMessage()">
+      Envoyer
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

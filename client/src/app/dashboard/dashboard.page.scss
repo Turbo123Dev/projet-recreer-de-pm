@@ -24,11 +24,12 @@
   --ion-color-success: #2dd36f; // Vert pour le succès/présentiel
   --ion-color-warning: #ffc409; // Jaune pour l'avertissement
   --ion-color-danger: #eb445a; // Rouge pour le danger
-  --ion-color-light: #f4f5f8; // Couleur de fond générale claire
+  --ion-color-light: #f4f5f8; // Gris très clair (gardé au cas où vous en auriez besoin ailleurs)
   --ion-color-medium: #92949c; // Gris moyen
   --ion-color-dark: #222428; // Texte sombre
+
   // Couleurs spécifiques pour le dashboard
-  --dashboard-bg-color: var(--ion-color-light); // Fond général du contenu
+  --dashboard-bg-color: #ffffff; // FOND BLANC PUR POUR LE CONTENU DU DASHBOARD
   --card-bg-color: #ffffff; // Fond des cartes
   --text-color-dark: var(--ion-color-dark);
   --text-color-medium: var(--ion-color-medium);

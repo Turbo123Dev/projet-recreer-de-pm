@@ -5,7 +5,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-
+// MODIFICATION CLÉ ICI : import de la fonction nommée 'jwtDecode'
+import { jwtDecode } from 'jwt-decode';
 
 // Définissez l'interface pour un sujet pour un meilleur typage
 export interface Subject {
@@ -19,7 +20,7 @@ export interface Subject {
 export class AuthService {
   private authUrl = `${environment.apiUrl}/api/auth`;
   private subjectsApiUrl = `${environment.apiUrl}/api/subjects`;
-  private dashboardUrl = `${environment.apiUrl}/api/dashboard`
+  private dashboardUrl = `${environment.apiUrl}/api/dashboard`;
 
   private token: string | null = null;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
@@ -52,12 +53,8 @@ export class AuthService {
     );
   }
 
-  /**
-   * Récupère la liste des sujets depuis le backend.
-   * La méthode est maintenant typée pour retourner un tableau d'objets { _id: string, name: string }.
-   */
-  getSubjects(): Observable<Subject[]> { // <-- CHANGEMENT ICI : Typage plus précis
-    return this.http.get<Subject[]>(this.subjectsApiUrl).pipe( // <-- CHANGEMENT ICI : Requête HTTP typée
+  getSubjects(): Observable<Subject[]> {
+    return this.http.get<Subject[]>(this.subjectsApiUrl).pipe(
       catchError(this.handleError)
     );
   }
@@ -93,13 +90,11 @@ export class AuthService {
     return throwError(() => new Error(errorMessage));
   }
 
-
-  //logique pour recuperer le token
   getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'x-auth-token': token ? token : '' // Ajoute le token à l'en-tête
+      'x-auth-token': token ? token : ''
     });
   }
 
@@ -118,4 +113,21 @@ export class AuthService {
     return this.http.get<any>(`${this.dashboardUrl}/stats`, { headers });
   }
 
+  // Méthode pour obtenir l'ID de l'utilisateur à partir du JWT
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (token) {
+      try {
+        // UTILISATION DE jwtDecode comme fonction nommée
+        const decodedToken: any = jwtDecode(token);
+        // Le champ 'id' est le plus courant pour l'ID utilisateur dans les tokens JWT.
+        // Si votre backend utilise un autre nom (ex: 'userId', 'sub'), ajustez ici.
+        return decodedToken.id || decodedToken.userId || decodedToken.sub || null;
+      } catch (error) {
+        console.error('Erreur lors du décodage du token JWT:', error);
+        return null;
+      }
+    }
+    return null;
+  }
 }
