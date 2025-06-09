@@ -6,6 +6,11 @@ const cors = require('cors');
 const mongoose = require('mongoose'); // Pour MongoDB
 const authRoutes = require('./routes/authRoutes'); // Importe vos routes d'authentification
 const subjectsRoutes = require('./routes/subjects'); // <-- NOUVEAU : Importe vos routes de sujets
+const userRoutes = require('./routes/userRoutes');           // <-- NOUVEAU
+const sessionRoutes = require('./routes/sessionRoutes');   
+
+app.use('/api/sessions', sessionRoutes);   // <-- NOUVEAU : pour la création de sessions
+app.use('/api/users', userRoutes);      
 
 const app = express();
 const PORT = process.env.PORT || 5000;
