@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Planifier une Nouvelle Session</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="createSession()">
+    <ion-list>
+      <ion-item>
+        <ion-select label="Sujet" placeholder="Sélectionnez un sujet" [(ngModel)]="session.subject" name="subject" (ionChange)="onSubjectChange()" required>
+          <ion-select-option *ngFor="let subject of subjects" [value]="subject._id">{{ subject.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="isStudent">
+        <ion-select label="Niveau de tuteur souhaité" placeholder="Sélectionnez un niveau" [(ngModel)]="session.level" name="level" (ionChange)="onLevelChange()">
+          <ion-select-option value="Licence1">Licence 1</ion-select-option>
+          <ion-select-option value="Licence2">Licence 2</ion-select-option>
+          <ion-select-option value="Licence3">Licence 3</ion-select-option>
+          <ion-select-option value="Master1">Master 1</ion-select-option>
+          <ion-select-option value="Master2">Master 2</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Tuteur" placeholder="Sélectionnez un tuteur" [(ngModel)]="session.tutor" name="tutor" required>
+          <ion-select-option *ngFor="let tutor of filteredTutors" [value]="tutor._id">{{ tutor.username }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-datetime-button datetime="datetime"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="datetime"
+              presentation="date"
+              [(ngModel)]="session.date"
+              name="date"
+              [min]="minDate"
+              required
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+        <ion-label position="stacked">Date de la session</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Heure de début (HH:MM)" type="time" [(ngModel)]="session.startTime" name="startTime" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Heure de fin (HH:MM)" type="time" [(ngModel)]="session.endTime" name="endTime" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Mode" placeholder="Sélectionnez le mode" [(ngModel)]="session.mode" name="mode" required>
+          <ion-select-option value="Présentiel">Présentiel</ion-select-option>
+          <ion-select-option value="En ligne">En ligne</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top">Créer la Session</ion-button>
+  </form>
+</ion-content>

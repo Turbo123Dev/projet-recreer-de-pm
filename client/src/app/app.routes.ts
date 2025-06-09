@@ -23,8 +23,8 @@ export const routes: Routes = [
     loadComponent: () => import('./dashboard/dashboard.page').then(m => m.DashboardPage) // <-- IMPORTANT : Mettez le chemin et le nom de la classe de votre composant de tableau de bord
   },
   {
-    path: 'request-session',
-    loadComponent: () => import('./request-session/request-session.page').then( m => m.RequestSessionPage)
+    path: 'create-session',
+    loadComponent: () => import('./create-session/create-session.page').then( m => m.CreateSessionPage)
   },
   // Ajoutez d'autres routes ici si nécessaire
 ];
