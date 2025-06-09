@@ -93,7 +93,7 @@ const initFakeData = async () => {
     isOnline: true
   }
 ];
-
+a
       await User.insertMany(tutors);
 
       // Créer des contrats fictifs
