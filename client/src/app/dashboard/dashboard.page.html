@@ -1,3 +1,14 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+      <ion-title>
+          <div class="header-title">
+              <ion-icon name="school-outline"></ion-icon>
+              Soutiens-moi
+          </div>
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true" class="dashboard-content" color-scheme="light">
 
   <div *ngIf="isLoadingData" class="ion-text-center ion-padding-top">
@@ -22,6 +33,52 @@
               <ion-icon name="flash-outline"></ion-icon>
               Actions rapides
           </h3>
+
+          <div class="actions-grid">
+              <div class="action-card" (click)="goToSearch()">
+                  <div class="action-icon search-icon">
+                      <ion-icon name="search-outline"></ion-icon>
+                  </div>
+                  <div class="action-content">
+                      <h4>Rechercher</h4>
+                      <p>Trouver un tuteur ou étudiant</p>
+                  </div>
+                  <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
+              </div>
+
+              <div class="action-card" (click)="goToPlanning()">
+                  <div class="action-icon calendar-icon">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                  </div>
+                  <div class="action-content">
+                      <h4>Planifier</h4>
+                      <p>Organiser une nouvelle séance</p>
+                  </div>
+                  <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
+              </div>
+
+              <div class="action-card" (click)="goToChat()">
+                  <div class="action-icon chat-icon">
+                      <ion-icon name="chatbubbles-outline"></ion-icon>
+                  </div>
+                  <div class="action-content">
+                      <h4>Chat</h4>
+                      <p>Communiquer avec vos contacts</p>
+                  </div>
+                  <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
+              </div>
+
+              <div class="action-card" (click)="goToFAQ()">
+                  <div class="action-icon help-icon">
+                      <ion-icon name="help-circle-outline"></ion-icon>
+                  </div>
+                  <div class="action-content">
+                      <h4>FAQ</h4>
+                      <p>Questions fréquentes</p>
+                  </div>
+                  <ion-icon name="chevron-forward-outline" class="action-arrow"></ion-icon>
+              </div>
+          </div>
           </div>
 
       <div class="upcoming-sessions-section">
@@ -30,7 +87,7 @@
                   <ion-icon name="time-outline"></ion-icon>
                   Mes prochaines séances
               </h3>
-              <ion-button fill="clear" size="small" (click)="viewAllSessions()">
+              <ion-button *ngIf="upcomingSessions.length > 0" fill="clear" size="small" (click)="viewAllSessions()">
                   Voir tout
               </ion-button>
           </div>
@@ -61,9 +118,6 @@
           </div>
 
           <div class="no-sessions" *ngIf="upcomingSessions.length === 0">
-              <div class="no-sessions-icon">
-                  📅
-              </div>
               <h4>Aucune séance programmée</h4>
               <p>Planifiez votre première séance de tutorat</p>
               <ion-button fill="outline" color="primary" (click)="goToPlanning()">
